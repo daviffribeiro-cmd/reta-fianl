@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reta Final 2026 · Matriz Educação</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#1dc99e;--lime:#84d43c;--navy:#1a2e44;--navy2:#223758;
+  --grad:linear-gradient(90deg,#1dc99e,#84d43c);
+  --grad135:linear-gradient(135deg,#1dc99e,#84d43c);
+  --white:#fff;--bg:#f5fefb;--card:#fff;
+  --t1:#0d1f2e;--t2:#2a3f54;--t3:#6b8ea6;
+  --border:#b8e8d0;--gbg:#edf9f3;
+  --red:#e53e3e;--amber:#d97706;--green:#16a34a;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(135deg,#0b1a2b 0%,var(--navy) 55%,#1c3560 100%);padding:24px 20px 20px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(29,201,158,.18) 0%,transparent 70%)}
+.hdr-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:relative}
+.hdr-logo{width:58px;height:58px;border-radius:14px;object-fit:cover;box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 2px rgba(29,201,158,.35);flex-shrink:0}
+.hdr-text{flex:1;min-width:160px}
+.hdr-brand{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px}
+.hdr-title{font-size:24px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:.3px}
+.hdr-save{font-size:11px;color:rgba(255,255,255,.45);margin-top:4px;display:flex;align-items:center;gap:4px}
+.save-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-chips{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.hdr-chip{background:rgba(255,255,255,.07);border:1.5px solid rgba(29,201,158,.3);border-radius:12px;padding:8px 14px;text-align:center;min-width:110px}
+.hdr-chip-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:3px}
+.hdr-chip-num{font-size:22px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.hdr-chip-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.hdr-chip.urgent .hdr-chip-num{background:none;-webkit-text-fill-color:#f87171;color:#f87171}
+
+/* ── TABS ── */
+.tabs{background:#fff;border-bottom:2px solid #d4f0e3;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,46,68,.08)}
+.tabs-inner{max-width:960px;margin:0 auto;display:flex;padding:0 12px;overflow-x:auto}
+.tab{background:none;border:none;font-size:14px;font-weight:700;color:var(--t3);padding:15px 22px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;letter-spacing:.2px}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--navy);border-bottom-color:var(--teal)}
+
+/* ── MAIN ── */
+.main{max-width:960px;margin:0 auto;padding:20px 14px 80px}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 2px 18px rgba(13,31,46,.07);margin-bottom:18px;overflow:hidden}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--gbg);border-bottom:1.5px solid var(--border)}
+.card-h-bar{width:4px;height:22px;background:var(--grad);border-radius:2px;flex-shrink:0}
+.card-h h2{font-size:15px;font-weight:800;color:var(--navy);flex:1}
+.card-h .ico{font-size:18px}
+.card-b{padding:20px}
+.card-b p.src{font-size:11.5px;color:var(--t3);margin-bottom:14px}
+
+/* ── INDICADORES ── */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.ind-item{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:14px 16px;text-align:center;transition:box-shadow .2s}
+.ind-item:hover{box-shadow:0 4px 16px rgba(29,201,158,.15)}
+.ind-num{font-size:30px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.ind-lbl{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.ind-sub{font-size:12px;color:var(--t2);margin-top:3px;font-weight:600}
+.ind-prog{height:5px;background:#ddf0e8;border-radius:3px;margin-top:8px;overflow:hidden}
+.ind-prog-fill{height:100%;background:var(--grad);border-radius:3px;transition:width .6s ease}
+
+/* ── SEMANA ATUAL DESTAQUE ── */
+.sem-atual-badge{display:inline-flex;align-items:center;gap:6px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.2px}
+
+/* ── WEEKS ── */
+.week-list{display:flex;flex-direction:column;gap:10px}
+.wk{border:1.5px solid var(--border);border-radius:14px;overflow:hidden;background:#fff;transition:box-shadow .2s}
+.wk.current{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,201,158,.13)}
+.wk.past{opacity:.65}
+.wk-hdr{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--gbg);cursor:pointer;user-select:none;transition:background .15s}
+.wk-hdr:hover{background:#e0f5ec}
+.wk-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wk.current .wk-num{background:var(--grad);box-shadow:0 2px 10px rgba(29,201,158,.4)}
+.wk.past .wk-num{background:#a0bac8}
+.wk-info{flex:1;min-width:0}
+.wk-title{font-size:14px;font-weight:700;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk-foco{font-size:11.5px;color:var(--t3);margin-top:2px}
+.wk-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.wk-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px}
+.tag-now{background:rgba(29,201,158,.18);color:#0a7a5a}
+.tag-fut{background:#e8f5e9;color:#2e7d32}
+.tag-old{background:#f1f5f9;color:var(--t3)}
+.wk-arrow{font-size:12px;color:var(--t3);transition:transform .2s}
+.wk.open .wk-arrow,.wk.current .wk-arrow{transform:rotate(180deg)}
+.wk-body{display:none;padding:0 16px 14px}
+.wk.open .wk-body,.wk.current .wk-body{display:block}
+.task-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.task{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:9px;background:#f7fdfb;border:1px solid #d8f0e6;transition:background .15s}
+.task:hover{background:#eefaf4}
+.task input[type=checkbox]{width:17px;height:17px;accent-color:var(--teal);flex-shrink:0;margin-top:1px;cursor:pointer}
+.task label{flex:1;font-size:13px;color:var(--t1);cursor:pointer;line-height:1.5}
+.task input:checked ~ label{color:var(--t3);text-decoration:line-through}
+.task.done{background:#f0fdf7;border-color:#bbe8d4}
+.pri{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;flex-shrink:0;align-self:center}
+.pri-a{background:#fee2e2;color:#b91c1c}
+.pri-m{background:#fef3c7;color:#92400e}
+.pri-b{background:#d1fae5;color:#065f46}
+.wk-prog{height:4px;background:#ddf0e8;border-radius:2px;margin-top:12px;overflow:hidden}
+.wk-prog-fill{height:100%;background:var(--grad);border-radius:2px;transition:width .4s}
+
+/* ── COUNTDOWN CARDS ── */
+.cd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.cd-item{background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid rgba(29,201,158,.2);border-radius:13px;padding:18px 14px;text-align:center;color:#fff}
+.cd-item.urgent{background:linear-gradient(135deg,#7f1d1d,#991b1b)}
+.cd-item.safe{background:linear-gradient(135deg,#0a4a32,#0d5c3e)}
+.cd-num{font-size:36px;font-weight:900;line-height:1;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cd-item.urgent .cd-num,.cd-item.safe .cd-num{background:none;-webkit-text-fill-color:#fff}
+.cd-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.cd-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+.cd-exam-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.cd-exam-pill{border-radius:10px;padding:11px 14px;text-align:center;background:linear-gradient(135deg,var(--navy),var(--navy2));border:1px solid rgba(29,201,158,.2)}
+.cd-exam-pill .lbl{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.cd-exam-pill .val{font-size:13px;font-weight:700;color:rgba(255,255,255,.85)}
+
+/* ── INFO GRID ── */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.info-item{background:var(--gbg);border:1.5px solid var(--border);border-radius:11px;padding:13px 15px;border-left:3px solid var(--teal)}
+.info-lbl{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.info-val{font-size:14px;font-weight:800;color:var(--navy);line-height:1.3}
+.info-hint{font-size:11px;color:var(--t3);margin-top:3px}
+
+/* ── PROVAS GRID ── */
+.provas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.prova-card{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:14px 16px;border-top:3px solid var(--teal);transition:box-shadow .2s,transform .2s}
+.prova-card:hover{box-shadow:0 6px 20px rgba(29,201,158,.15);transform:translateY(-2px)}
+.prova-year{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.prova-badge{font-size:10px;font-weight:700;background:var(--grad);color:#fff;padding:2px 9px;border-radius:8px}
+.prova-btns{display:flex;flex-direction:column;gap:6px}
+.prova-btn{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;width:100%;transition:all .2s;text-align:left}
+.prova-btn:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.btn-d1{background:var(--navy);color:#fff}
+.btn-d2{background:var(--navy2);color:#fff}
+.btn-un{background:var(--navy);color:#fff}
+
+/* ── TOPICS ── */
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.topic-card{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;border-top:3px solid var(--lime)}
+.topic-subj{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.topic-items{list-style:none;display:flex;flex-direction:column;gap:5px}
+.topic-items li{font-size:12px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.4}
+.topic-items li::before{content:'▸';color:var(--teal);font-size:11px;flex-shrink:0;margin-top:1px}
+.topic-items li.hot::before{content:'🔥';font-size:10px}
+
+/* ── TIPS ── */
+.tips-list{display:flex;flex-direction:column;gap:10px}
+.tip{display:flex;gap:13px;align-items:flex-start;padding:14px 16px;background:#fff;border:1px solid var(--border);border-radius:12px;border-left:4px solid var(--teal);transition:box-shadow .2s}
+.tip:hover{box-shadow:0 3px 14px rgba(29,201,158,.13)}
+.tip-ico{font-size:22px;flex-shrink:0;margin-top:1px}
+.tip strong{font-size:13px;font-weight:700;color:var(--navy);display:block;margin-bottom:3px}
+.tip p{font-size:12.5px;color:var(--t2);line-height:1.55}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:20px;background:var(--grad);color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:30px;box-shadow:0 4px 20px rgba(29,201,158,.4);z-index:9999;transition:opacity .3s,transform .3s;pointer-events:none}
+.toast.hide{opacity:0;transform:translateY(10px)}
+
+.hidden{display:none!important}
+@media(max-width:580px){
+  .hdr-chips{width:100%}
+  .hdr-chip{flex:1}
+  .tab{padding:13px 14px;font-size:13px}
+  .provas-grid{grid-template-columns:1fr 1fr}
+  .topics-grid{grid-template-columns:1fr 1fr}
+  .ind-grid{grid-template-columns:repeat(2,1fr)}
+  .hdr-title{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <img src="./logo.jpg" class="hdr-logo" alt="Matriz">
+    <div class="hdr-text">
+      <div class="hdr-brand">Matriz Educação</div>
+      <div class="hdr-title">Reta Final 2026</div>
+      <div class="hdr-save"><span class="save-dot"></span> Progresso salvo automaticamente no navegador</div>
+    </div>
+    <div class="hdr-chips">
+      <div class="hdr-chip" id="chipEP">
+        <div class="hdr-chip-lbl">✈️ EPCAr</div>
+        <div class="hdr-chip-num" id="chipEPnum">—</div>
+        <div class="hdr-chip-sub">dias · 21/06/2026</div>
+      </div>
+      <div class="hdr-chip" id="chipCN">
+        <div class="hdr-chip-lbl">⚓ CN 1º Dia</div>
+        <div class="hdr-chip-num" id="chipCNnum">—</div>
+        <div class="hdr-chip-sub">dias · 01/08/2026</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ TABS ══ -->
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab active" id="tabPlano" onclick="setTab('plano')">🗓️ Plano Semanal</button>
+    <button class="tab" id="tabCN"    onclick="setTab('cn')">⚓ Colégio Naval</button>
+    <button class="tab" id="tabEP"    onclick="setTab('epcar')">✈️ EPCAr</button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ══════════ PLANO ══════════ -->
+<div id="tab-plano">
+
+  <!-- Indicadores -->
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📊</span><h2>Indicadores de Progresso</h2></div>
+    <div class="card-b">
+      <div class="ind-grid" id="indGrid"></div>
+    </div>
+  </div>
+
+  <!-- Plano Semanal -->
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📅</span><h2>Plano Semanal — CN + EPCAr</h2></div>
+    <div class="card-b">
+      <div id="semAtualBadge"></div>
+      <div class="week-list" id="weeksGeral"></div>
+    </div>
+  </div>
+
+  <!-- Mais dicas gerais -->
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">🧠</span><h2>Estratégias de Estudo — Manual do Classificado</h2></div>
+    <div class="card-b">
+      <div class="tips-list">
+        <div class="tip"><span class="tip-ico">📄</span><div><strong>Resolver todas as provas anteriores</strong><p>Principalmente os últimos 5 anos. Estudar a prova é estudar a banca: padrão de enunciado, nível de dificuldade, tópicos que se repetem. É a atividade com maior retorno de tempo investido.</p></div></div>
+        <div class="tip"><span class="tip-ico">🗺️</span><div><strong>Mapear os assuntos que mais caem</strong><p>Use os tópicos listados em cada aba como guia. Revise-os constantemente — não basta ver uma vez, é preciso fixar por repetição espaçada.</p></div></div>
+        <div class="tip"><span class="tip-ico">🏫</span><div><strong>Participar de todas as aulas das turmas especiais</strong><p>Nenhuma aula é opcional na reta final. Cada encontro pode cobrir um tópico decisivo que vai cair na prova.</p></div></div>
+        <div class="tip"><span class="tip-ico">📝</span><div><strong>Realizar todos os simulados, sem exceção</strong><p>Simular é treinar ritmo, resistência e tomada de decisão sob pressão. Quem pula simulado chega despreparado na hora H.</p></div></div>
+        <div class="tip"><span class="tip-ico">🔍</span><div><strong>Corrigir com foco nos erros conceituais</strong><p>Não basta ver o gabarito. Para cada erro pergunte: foi conceito, distração ou falta de prática? Anote numa tabela e use nas semanas de revisão.</p></div></div>
+        <div class="tip"><span class="tip-ico">⏱️</span><div><strong>Técnica Pomodoro nas revisões</strong><p>Estude em blocos de 45 min + 10 min de pausa. Após 4 blocos, descanse 30 min. A concentração sustentada é mais eficaz do que horas contínuas sem foco.</p></div></div>
+        <div class="tip"><span class="tip-ico">🤝</span><div><strong>Usar as monitorias para sanar dúvidas</strong><p>Dúvida não resolvida vira erro certo. Procure o monitor ou professor assim que a dificuldade aparecer — não deixe acumular.</p></div></div>
+        <div class="tip"><span class="tip-ico">📅</span><div><strong>Manter disciplina, constância e rotina sólida</strong><p>Resultado é fruto de consistência diária, não de maratonas na véspera. Uma rotina previsível + foco nos pontos fracos = aprovação.</p></div></div>
+        <div class="tip"><span class="tip-ico">💪</span><div><strong>Não desanimar ao longo do caminho</strong><p>Conheça seus pontos fortes e, principalmente, seus pontos fracos. Quem estuda a prova e conhece a banca tem uma vantagem enorme sobre os demais candidatos.</p></div></div>
+        <div class="tip"><span class="tip-ico">📦</span><div><strong>Véspera: kit e logística</strong><p>Identidade/RG, caneta azul ou preta, lanche e água. Confirme o endereço, durma 8h e chegue 30–40 min antes. Tranquilidade na chegada vale pontos.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #tab-plano -->
+
+
+<!-- ══════════ CN ══════════ -->
+<div id="tab-cn" class="hidden">
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">⏳</span><h2>Contagem Regressiva — CPACN 2026</h2></div>
+    <div class="card-b">
+      <div class="cd-exam-row">
+        <div class="cd-exam-pill"><div class="lbl">1º Dia · 01/08/2026</div><div class="val">Matemática · Inglês</div></div>
+        <div class="cd-exam-pill"><div class="lbl">2º Dia · 02/08/2026</div><div class="val">Português · Est. Sociais · Ciências · Redação</div></div>
+      </div>
+      <div class="cd-grid" id="cdCN"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📋</span><h2>Formato do Exame — CN</h2></div>
+    <div class="card-b">
+      <div class="info-grid">
+        <div class="info-item"><div class="info-lbl">1º Dia</div><div class="info-val">Matemática + Inglês</div><div class="info-hint">Múltipla escolha</div></div>
+        <div class="info-item"><div class="info-lbl">2º Dia</div><div class="info-val">Português + Est. Sociais + Ciências + Redação</div><div class="info-hint">Múltipla escolha + Redação</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">🔥</span><h2>Tópicos que Mais Caem — CN</h2></div>
+    <div class="card-b"><p class="src">Fonte: Manual do Classificado CN/EPCAr · 🔥 = recorrência máxima</p>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-subj">📐 Matemática</div><ul class="topic-items">
+          <li class="hot">Razão e proporção</li><li class="hot">Função quadrática</li><li class="hot">Áreas (planas)</li><li class="hot">Semelhança de triângulos e relações métricas</li>
+          <li>Números racionais</li><li>Contagem</li><li>Produtos notáveis</li><li>Inequações produto e quociente</li><li>Triângulos retângulos</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">📖 Português</div><ul class="topic-items">
+          <li class="hot">Interpretação de texto</li><li class="hot">Concordância verbal e nominal</li><li class="hot">Termos integrantes (OD, OI, CN, agente da passiva)</li>
+          <li>Conjugação verbal — modos e tempos</li><li>Emprego do vocábulo "que"</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">📜 História</div><ul class="topic-items">
+          <li class="hot">Colônia e o Mundo: metrópole, invasões, vizinhos</li><li class="hot">Primeira República: política e governabilidade</li>
+          <li>Independência do Brasil e Guerra de Independência</li><li>Nacional-desenvolvimentismo: industrialização e urbanização</li><li>Era Vargas: do café à indústria</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">🌎 Geografia</div><ul class="topic-items">
+          <li class="hot">Geografia econômica do Brasil</li><li class="hot">População brasileira</li>
+          <li>Meteorologia e climatologia</li><li>Agronegócio</li><li>Hidrografia brasileira</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">⚡ Física</div><ul class="topic-items">
+          <li class="hot">Cinemática escalar: MU, MUV, mov. vertical e gráficos</li><li class="hot">Leis de Newton</li>
+          <li>Temperatura, calor, dilatação e 1ª Lei da Termodinâmica</li><li>Refração da luz</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">⚗️ Química</div><ul class="topic-items">
+          <li class="hot">Tabela periódica e propriedades periódicas</li><li class="hot">Modelos atômicos e estrutura do átomo</li>
+          <li>Materiais homogêneos e heterogêneos</li><li>Separação de misturas</li><li>Matéria: propriedades gerais e estados físicos</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">🧬 Biologia</div><ul class="topic-items">
+          <li class="hot">Heredogramas</li><li class="hot">Relações ecológicas</li>
+          <li>Membrana plasmática e envoltórios celulares</li><li>Sistema reprodutor humano (anatomia e fisiologia)</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">🇬🇧 Inglês</div><ul class="topic-items">
+          <li class="hot">Interpretação de texto</li><li class="hot">Tempos verbais (simple, continuous, perfect)</li>
+          <li>Pronomes e possessivos</li><li>Preposições de lugar e tempo</li><li>Vocabulário contextualizado</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📄</span><h2>Provas Anteriores — CPACN 2020–2025</h2></div>
+    <div class="card-b">
+      <div class="provas-grid">
+        <div class="prova-card"><div class="prova-year">2025 <span class="prova-badge">Mais recente</span></div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('CPACN 2025 1DIA AMARELO (1).pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('CPACN 2025 2DIA AMARELO (1).pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2024</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('CPACN-2024_1ºDIA_AMARELA (1).pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('CPACN-2024_2ºDIA_AMARELA (1).pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2023</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('2023 - 1º Dia (Matemática e Inglês)  Prova AMARELA.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('2023 - 2º Dia (Português, Estudos Sociais e Ciências)  Prova AMARELA.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2022</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('2022 - 1º Dia (Matemática e Inglês)  Prova AMARELA.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('CPACN -2022 2° DIA - AMARELA.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2021</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('Prova Amarela-CPACN-2021-1° dia.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('Prova Amarela-CPACN-2021 2° dia.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2020</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('CPACN-2020  matemática e inglês 1ºDIA PROVA AMARELA.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('CPACN-2020 português, estudos sociais e ciências 2ºDIA PROVA AMARELA.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2019</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('AMARELA2019 - 1ºDIA.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('AMARELA 2019- 2º DIA.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2018</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('CPACN 2018 MATEMÁTICA E INGLÊS - AMARELA.pdf')">📄 1º Dia · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('CPACN 2018 PORTUGUÊS, ESTUDOS SOCIAIS E CIÊNCIAS - AMARELA.pdf')">📄 2º Dia · Port + Soc + Ciê</button></div></div>
+        <div class="prova-card"><div class="prova-year">2017</div><div class="prova-btns">
+          <button class="prova-btn btn-d1" onclick="pdf('CPACN_2017_ 1ªFASE_AMARELA.pdf')">📄 1ª Fase · Mat + Ingl</button>
+          <button class="prova-btn btn-d2" onclick="pdf('2017 - 2ª Fase (Português, Estudo Sociais e Ciênciass)  Prova AMARELA.pdf')">📄 2ª Fase · Port + Soc + Ciê</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">💡</span><h2>Dicas Específicas — CN</h2></div>
+    <div class="card-b"><div class="tips-list">
+      <div class="tip"><span class="tip-ico">📐</span><div><strong>Matemática é o fator decisivo</strong><p>É a matéria com maior peso e maior poder de diferenciação. Errar sistematicamente em Matemática torna quase impossível compensar nas outras matérias. Priorize-a acima de tudo.</p></div></div>
+      <div class="tip"><span class="tip-ico">🗓️</span><div><strong>Simule os dois dias em sequência</strong><p>O CN tem dois dias de prova. A resistência cognitiva importa: treine fazendo os dois dias de uma vez na mesma tarde/noite para preparar o corpo e a mente.</p></div></div>
+      <div class="tip"><span class="tip-ico">🧩</span><div><strong>Entenda o conceito antes do exercício</strong><p>Em Ciências (Física, Química, Biologia) entender o "por quê" é mais eficiente do que decorar. Um conceito compreendido resolve 5 questões; uma fórmula decorada, só uma.</p></div></div>
+      <div class="tip"><span class="tip-ico">📜</span><div><strong>História e Geografia: mapas mentais e linhas do tempo</strong><p>Crie uma linha do tempo visual dos períodos históricos e um mapa mental dos temas geográficos. Informação visual é retida mais facilmente do que texto corrido.</p></div></div>
+      <div class="tip"><span class="tip-ico">✏️</span><div><strong>Português: pratique identificar termos</strong><p>Termos integrantes e classes gramaticais aparecem em quase todos os anos. Faça o exercício de "dissecar" frases de provas antigas — é o treinamento mais direto.</p></div></div>
+      <div class="tip"><span class="tip-ico">🎯</span><div><strong>Na prova: questões certas primeiro</strong><p>Leia todas as questões, resolva primeiro as que tem certeza, marque as dúvidosas e volte. Não perca tempo travado em uma questão difícil quando há pontos garantidos para fazer.</p></div></div>
+      <div class="tip"><span class="tip-ico">💧</span><div><strong>Hidratação e alimentação no dia da prova</strong><p>Café da manhã leve e nutritivo. Leve água e um lanche pequeno. Desidratação e queda de glicose prejudicam a concentração nas últimas horas de prova.</p></div></div>
+    </div></div>
+  </div>
+
+</div><!-- #tab-cn -->
+
+
+<!-- ══════════ EPCAr ══════════ -->
+<div id="tab-epcar" class="hidden">
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">⏳</span><h2>Contagem Regressiva — EPCAr 2026</h2></div>
+    <div class="card-b">
+      <div style="background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:12px;padding:13px 18px;text-align:center;margin-bottom:14px;border:1px solid rgba(29,201,158,.2)">
+        <div style="font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">1ª Fase Escrita — 21/06/2026</div>
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.75)">Matemática · Português · Inglês · Redação</div>
+      </div>
+      <div class="cd-grid" id="cdEP"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📋</span><h2>Formato do Exame — EPCAr</h2></div>
+    <div class="card-b">
+      <div class="info-grid">
+        <div class="info-item"><div class="info-lbl">Matérias</div><div class="info-val">Matemática · Português · Inglês · Redação</div><div class="info-hint">4 disciplinas</div></div>
+        <div class="info-item"><div class="info-lbl">Formato</div><div class="info-val">Questões objetivas + Redação</div><div class="info-hint">1 dia de prova</div></div>
+        <div class="info-item"><div class="info-lbl">Data</div><div class="info-val">21/06/2026</div><div class="info-hint">1ª Fase escrita</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">🔥</span><h2>Tópicos que Mais Caem — EPCAr</h2></div>
+    <div class="card-b"><p class="src">Fonte: Manual do Classificado CN/EPCAr · 🔥 = recorrência máxima</p>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-subj">📐 Matemática</div><ul class="topic-items">
+          <li class="hot">Função quadrática (gráficos e vértice)</li><li class="hot">Semelhança e relações métricas nos triângulos</li><li class="hot">Áreas (planas)</li>
+          <li>Conjuntos e conjuntos numéricos</li><li>Estatística básica e análise de gráficos</li><li>Produtos notáveis e fatoração</li><li>Equação do 2º grau</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">📖 Português</div><ul class="topic-items">
+          <li class="hot">Interpretação de texto</li><li class="hot">Sintaxe</li>
+          <li>Funções da linguagem</li><li>Reescrita de frases</li><li>Substituição de palavras ou trechos</li><li>Tipologia e gênero textual</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">🇬🇧 Inglês</div><ul class="topic-items">
+          <li class="hot">Interpretação de texto</li><li class="hot">Tempos verbais</li>
+          <li>Vocabulário contextualizado</li><li>Pronomes e preposições</li></ul></div>
+        <div class="topic-card"><div class="topic-subj">✍️ Redação</div><ul class="topic-items">
+          <li class="hot">Dissertação argumentativa</li><li class="hot">Proposta de intervenção detalhada</li><li class="hot">Progressão temática e coesão</li>
+          <li>Introdução com tese clara</li><li>Desenvolvimento com argumentos + evidências</li><li>Conclusão com retomada da tese</li><li>Ortografia e gramática normativa</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📄</span><h2>Provas Anteriores — CPCAR 2018–2026</h2></div>
+    <div class="card-b">
+      <div class="provas-grid">
+        <div class="prova-card"><div class="prova-year">2026 <span class="prova-badge">Mais recente</span></div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar-2026-08-05-2025-P1-versão-A (1).pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2025</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('PROVA_CPCAR_2025_versao_A (1).pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2024</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('CPCAR2024_versao_A (1).pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2023</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('CPCAR_2023_versão_A.pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2022</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2022_versão_A.pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2021</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2021_prova_a.pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2020</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2020_prova__a.pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2019</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2019_prova_a.pdf')">📄 Prova — Versão A</button></div></div>
+        <div class="prova-card"><div class="prova-year">2018</div><div class="prova-btns">
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2018_prova_a.pdf')">📄 Prova — Versão A</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">💡</span><h2>Dicas Específicas — EPCAr</h2></div>
+    <div class="card-b"><div class="tips-list">
+      <div class="tip"><span class="tip-ico">📐</span><div><strong>Matemática e Redação são os pilares</strong><p>São as disciplinas com maior capacidade de diferenciação. Uma Redação bem estruturada + boa pontuação em Matemática coloca o candidato na faixa de classificados.</p></div></div>
+      <div class="tip"><span class="tip-ico">✍️</span><div><strong>Escreva uma redação por semana — sem exceção</strong><p>A redação melhora com prática sistemática. Escreva toda semana, corrija com critério (tese, argumentos, proposta de intervenção, coesão) e monitore a evolução.</p></div></div>
+      <div class="tip"><span class="tip-ico">📝</span><div><strong>Planeje a redação antes de escrever</strong><p>Reserve 5 minutos antes de começar para esboçar: tema central, 2 argumentos e a proposta de intervenção. Quem planeja escreve mais rápido e com mais coerência.</p></div></div>
+      <div class="tip"><span class="tip-ico">📖</span><div><strong>Português: foco em reescrita e substituição</strong><p>A EPCAr tem questões típicas de reescrever frases sem alterar o sentido e substituir termos. Treine com provas anteriores — o padrão se repete muito.</p></div></div>
+      <div class="tip"><span class="tip-ico">🇬🇧</span><div><strong>Inglês: interpretação vale mais que gramática</strong><p>A maioria dos pontos vem de interpretação de texto, não de gramática isolada. Pratique leitura de textos em inglês todos os dias — artigos, notícias curtas ou questões de provas.</p></div></div>
+      <div class="tip"><span class="tip-ico">📊</span><div><strong>Função quadrática aparece todo ano</strong><p>Sem exceção nas últimas edições. Domine: discriminante, vértice, gráfico (concavidade, zeros, valor mínimo/máximo). São os pontos mais fáceis de garantir em Matemática.</p></div></div>
+      <div class="tip"><span class="tip-ico">🎯</span><div><strong>Na prova: gerencie o tempo com firmeza</strong><p>Calcule quanto tempo tem por questão antes de começar. Se travar, pule e volte. Nunca fique mais de 3 minutos em uma questão sem avançar.</p></div></div>
+      <div class="tip"><span class="tip-ico">🏃</span><div><strong>Preparo físico importa</strong><p>O exame físico é a 2ª etapa. Se classificar na 1ª fase, você terá semanas para preparar. Manter hábito de atividade física desde agora facilita o processo.</p></div></div>
+    </div></div>
+  </div>
+
+</div><!-- #tab-epcar -->
+
+</main>
+
+<!-- Toast -->
+<div class="toast hide" id="toast">✓ Progresso salvo</div>
+
+<script>
+// ── DATAS ────────────────────────────────────────────
+const D_EP = new Date('2026-06-21T08:00:00');
+const D_CN = new Date('2026-08-01T08:00:00');
+
+// ── PLANO SEMANAL (CN + EPCAr por semana) ──────────
+const SEMANAS = [
+  {
+    n:8, titulo:'Diagnóstico — Semana de Avaliação',
+    foco:'Provas 2025 (CN) e 2026 P1 (EPCAr) · identificar fraquezas',
+    tasks:[
+      {t:'⚓ CN 2025 — 1º Dia (Mat + Inglês) · resolver completa com cronômetro', p:'a'},
+      {t:'⚓ CN 2025 — 2º Dia (Port + Est. Soc + Ciências) · resolver completa com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2026 P1 — resolver completa com cronômetro', p:'a'},
+      {t:'📊 Catalogar erros por matéria: % de acerto por disciplina em ambas as provas', p:'a'},
+      {t:'📖 Revisar: Função quadrática e semelhança de triângulos (CN + EPCAr)', p:'m'},
+      {t:'📖 Revisar: Interpretação de texto em Português e Inglês (CN + EPCAr)', p:'m'},
+    ]
+  },
+  {
+    n:7, titulo:'Matemática em Foco',
+    foco:'Provas 2024 (CN) e 2025 (EPCAr) · álgebra e geometria',
+    tasks:[
+      {t:'⚓ CN 2024 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
+      {t:'⚓ CN 2024 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2025 — resolver completa com cronômetro', p:'a'},
+      {t:'📖 CN: Revisar razão/proporção, produtos notáveis e inequações produto/quociente', p:'a'},
+      {t:'📖 EPCAr: Revisar produtos notáveis, fatoração e equação do 2º grau', p:'a'},
+      {t:'✍️ EPCAr: Escrever 1 redação dissertativa — corrigir tese, argumentos e proposta', p:'a'},
+    ]
+  },
+  {
+    n:6, titulo:'Português, Inglês e Redação',
+    foco:'Provas 2023 (CN) e 2024 (EPCAr) · interpretação e produção textual',
+    tasks:[
+      {t:'⚓ CN 2023 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
+      {t:'⚓ CN 2023 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2024 — resolver completa com cronômetro', p:'a'},
+      {t:'📖 CN: Revisar concordância, termos integrantes (OD, OI, CN, agente da passiva) e emprego do "que"', p:'a'},
+      {t:'📖 EPCAr: Revisar sintaxe, tipologia textual e reescrita de frases', p:'a'},
+      {t:'📖 Inglês (CN + EPCAr): tempos verbais, pronomes e interpretação', p:'m'},
+      {t:'✍️ EPCAr: Escrever 1 redação com foco na proposta de intervenção (agente, ação, modo, finalidade)', p:'a'},
+    ]
+  },
+  {
+    n:5, titulo:'Ciências (CN) + Matemática Avançada (EPCAr)',
+    foco:'Provas 2022 (CN) e 2023 (EPCAr) · ciências e geometria',
+    tasks:[
+      {t:'⚓ CN 2022 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
+      {t:'⚓ CN 2022 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2023 — resolver completa com cronômetro', p:'a'},
+      {t:'📖 CN: Revisar Física (cinemática escalar, Leis de Newton) e Química (tabela periódica, modelos atômicos)', p:'a'},
+      {t:'📖 CN: Revisar Biologia (heredogramas, relações ecológicas) e Química (separação de misturas)', p:'m'},
+      {t:'📖 EPCAr: Revisar Matemática — Áreas, semelhança de triângulos e estatística básica', p:'a'},
+      {t:'✍️ EPCAr: Escrever 1 redação — avaliar coesão e progressão temática', p:'a'},
+    ]
+  },
+  {
+    n:4, titulo:'História, Geografia e Revisão Geral',
+    foco:'Provas 2021 (CN) e 2022 (EPCAr) · humanas e revisão',
+    tasks:[
+      {t:'⚓ CN 2021 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
+      {t:'⚓ CN 2021 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2022 — resolver completa com cronômetro', p:'a'},
+      {t:'📖 CN: Revisar História (Colônia, Primeira República, Era Vargas, Independência)', p:'a'},
+      {t:'📖 CN: Revisar Geografia (Economia do Brasil, População, Hidrografia, Meteorologia)', p:'a'},
+      {t:'📖 EPCAr: Revisar Inglês — conectivos, false cognates e vocabulário contextualizado', p:'m'},
+      {t:'✍️ EPCAr: Escrever 1 redação — foco em argumentação com dados, fatos e exemplos', p:'a'},
+    ]
+  },
+  {
+    n:3, titulo:'Simulação Intensiva + Revisão de Erros',
+    foco:'Provas 2020 (CN) e 2021 (EPCAr) · refazer pontos fracos',
+    tasks:[
+      {t:'⚓ CN 2020 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
+      {t:'⚓ CN 2020 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2021 — resolver completa com cronômetro', p:'a'},
+      {t:'📊 Refazer todas as questões que errou nas semanas anteriores (CN + EPCAr)', p:'a'},
+      {t:'📖 CN: Revisar Física (temperatura, calor, refração da luz) e Bio (membrana plasmática)', p:'m'},
+      {t:'📖 Revisar tópicos com maior taxa de erro — identificados nas semanas anteriores', p:'a'},
+      {t:'✍️ EPCAr: Escrever 1 redação — avaliar desenvolvimento e conclusão', p:'a'},
+    ]
+  },
+  {
+    n:2, titulo:'Sprint Final',
+    foco:'Provas 2020 e 2019 (EPCAr) · ficha de fórmulas · revisão geral',
+    tasks:[
+      {t:'✈️ EPCAr 2020 — resolver completa com cronômetro (foco nos pontos fracos)', p:'a'},
+      {t:'✈️ EPCAr 2019 — resolver completa com cronômetro', p:'a'},
+      {t:'✈️ EPCAr 2018 — resolver completa com cronômetro (reforço extra)', p:'m'},
+      {t:'📖 Montar ficha de fórmulas de Matemática — CN e EPCAr (folha A4)', p:'a'},
+      {t:'📖 Revisão final de todos os tópicos com maior taxa de erro (CN + EPCAr)', p:'a'},
+      {t:'✍️ EPCAr: Redação final — corrigir com critério e registrar evolução desde a semana 7', p:'a'},
+    ]
+  },
+  {
+    n:1, titulo:'Véspera — Leveza e Preparação',
+    foco:'Zero conteúdo novo · mente descansada vale mais',
+    tasks:[
+      {t:'📖 Revisão leve da ficha de fórmulas (máx. 30 min) — nada de conteúdo novo!', p:'a'},
+      {t:'📖 EPCAr: Reler a melhor redação que escreveu para ativar o repertório', p:'m'},
+      {t:'✈️ Confirmar local, horário e documentos da prova EPCAr (edital FAB)', p:'a'},
+      {t:'⚓ Confirmar local, horário e documentos da prova CN (edital Marinha)', p:'a'},
+      {t:'📦 Preparar kit: RG/identidade, caneta preta ou azul, lápis, borracha, lanche, água', p:'a'},
+      {t:'😴 Dormir às 21h — mínimo 8h de sono antes de cada dia de prova', p:'a'},
+    ]
+  }
+];
+
+// ── UTILITÁRIOS ──────────────────────────────────────
+function pdf(n){ window.open('./'+encodeURIComponent(n),'_blank') }
+
+function setTab(t){
+  ['plano','cn','epcar'].forEach(id=>{
+    document.getElementById('tab-'+id).classList.toggle('hidden',id!==t);
+    document.getElementById('tab'+id.charAt(0).toUpperCase()+id.slice(1))?.classList.toggle('active',id===t);
+  });
+  // fix tab IDs
+  document.getElementById('tabPlano').classList.toggle('active',t==='plano');
+  document.getElementById('tabCN').classList.toggle('active',t==='cn');
+  document.getElementById('tabEP').classList.toggle('active',t==='epcar');
+}
+
+// ── COUNTDOWN ────────────────────────────────────────
+function diasH(alvo){
+  const ms = new Date(alvo)-new Date();
+  if(ms<=0) return {d:0,h:0,m:0,total:0};
+  const d=Math.floor(ms/86400000);
+  const h=Math.floor((ms%86400000)/3600000);
+  const m=Math.floor((ms%3600000)/60000);
+  return{d,h,m,total:Math.ceil(ms/86400000)};
+}
+function buildCD(id,alvo){
+  const {total}=diasH(alvo);
+  const urgente=total<=7, seguro=total>=42;
+  const cls=urgente?'cd-item urgent':seguro?'cd-item safe':'cd-item';
+  const semanas=Math.ceil(total/7);
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(total<=0){el.innerHTML=`<div class="${cls}" style="grid-column:1/-1"><div class="cd-num">🎯</div><div class="cd-lbl">Dia do Exame!</div></div>`;return;}
+  el.innerHTML=`
+    <div class="${cls}"><div class="cd-num">${total}</div><div class="cd-lbl">Dias Restantes</div></div>
+    <div class="${cls}"><div class="cd-num">${semanas}</div><div class="cd-lbl">Semanas</div></div>
+    ${urgente?`<div class="cd-item urgent" style="grid-column:1/-1"><div class="cd-lbl" style="font-size:13px;color:#fca5a5">⚠️ ÚLTIMOS DIAS — reta final máxima!</div></div>`:''}`;
+}
+function updateChips(){
+  const ep=diasH(D_EP), cn=diasH(D_CN);
+  const ce=document.getElementById('chipEPnum'), cc=document.getElementById('chipCNnum');
+  if(ce) ce.textContent=ep.total>0?ep.total:'🎯';
+  if(cc) cc.textContent=cn.total>0?cn.total:'🎯';
+  document.getElementById('chipEP')?.classList.toggle('urgent',ep.total<=7);
+  document.getElementById('chipCN')?.classList.toggle('urgent',cn.total<=7);
+}
+function updateAll(){buildCD('cdEP',D_EP);buildCD('cdCN',D_CN);updateChips();}
+
+// ── TOAST ────────────────────────────────────────────
+let toastTimer;
+function showToast(msg='✓ Progresso salvo'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.remove('hide');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.add('hide'),2000);
+}
+
+// ── SEMANAS ──────────────────────────────────────────
+function diasRest(alvo){
+  const ms=new Date(alvo)-new Date(); return Math.max(0,Math.ceil(ms/86400000));
+}
+function semanasRest(){ return Math.ceil(diasRest(D_EP)/7); }
+
+function taskId(n,i){ return `g-s${n}-t${i}` }
+
+function countTasks(){
+  let total=0,done=0,cnP=0,cnPD=0,epP=0,epPD=0,red=0,redD=0;
+  SEMANAS.forEach(s=>s.tasks.forEach((t,i)=>{
+    const id=taskId(s.n,i), ck=localStorage.getItem(id)==='1';
+    total++; if(ck)done++;
+    if(t.t.startsWith('⚓')){cnP++;if(ck)cnPD++;}
+    if(t.t.startsWith('✈️')){epP++;if(ck)epPD++;}
+    if(t.t.startsWith('✍️')){red++;if(ck)redD++;}
+  }));
+  return{total,done,cnP,cnPD,epP,epPD,red,redD};
+}
+
+function renderIndicadores(){
+  const c=countTasks();
+  const pct=c.total?Math.round(c.done/c.total*100):0;
+  const semAtual=Math.min(8,Math.max(1,semanasRest()));
+  const ep=diasRest(D_EP), cn=diasRest(D_CN);
+  document.getElementById('indGrid').innerHTML=`
+    <div class="ind-item">
+      <div class="ind-num">${pct}%</div>
+      <div class="ind-lbl">Conclusão Geral</div>
+      <div class="ind-sub">${c.done} / ${c.total} tarefas</div>
+      <div class="ind-prog"><div class="ind-prog-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-num">${c.cnPD}/${c.cnP}</div>
+      <div class="ind-lbl">Provas CN ⚓</div>
+      <div class="ind-sub">resolvidas</div>
+      <div class="ind-prog"><div class="ind-prog-fill" style="width:${c.cnP?Math.round(c.cnPD/c.cnP*100):0}%"></div></div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-num">${c.epPD}/${c.epP}</div>
+      <div class="ind-lbl">Provas EPCAr ✈️</div>
+      <div class="ind-sub">resolvidas</div>
+      <div class="ind-prog"><div class="ind-prog-fill" style="width:${c.epP?Math.round(c.epPD/c.epP*100):0}%"></div></div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-num">${c.redD}/${c.red}</div>
+      <div class="ind-lbl">Redações ✍️</div>
+      <div class="ind-sub">escritas</div>
+      <div class="ind-prog"><div class="ind-prog-fill" style="width:${c.red?Math.round(c.redD/c.red*100):0}%"></div></div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-num">${ep}</div>
+      <div class="ind-lbl">Dias p/ EPCAr</div>
+      <div class="ind-sub">21 / 06 / 2026</div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-num">${cn}</div>
+      <div class="ind-lbl">Dias p/ CN</div>
+      <div class="ind-sub">01 / 08 / 2026</div>
+    </div>`;
+}
+
+function renderSemanas(){
+  const semAtual=Math.min(8,Math.max(1,semanasRest()));
+  const badge=document.getElementById('semAtualBadge');
+  if(badge) badge.innerHTML=`<div class="sem-atual-badge">📍 Você está na Semana ${semAtual} de 8</div>`;
+  const cont=document.getElementById('weeksGeral');
+  let html='';
+  const sorted=[
+    ...SEMANAS.filter(s=>s.n===semAtual),
+    ...SEMANAS.filter(s=>s.n<semAtual).sort((a,b)=>b.n-a.n),
+    ...SEMANAS.filter(s=>s.n>semAtual).sort((a,b)=>b.n-a.n)
+  ];
+  sorted.forEach(s=>{
+    const isCur=s.n===semAtual||(semanasRest()>8&&s.n===8);
+    const isPast=s.n>semAtual&&!isCur;
+    const cls=`wk${isCur?' current':''}${isPast?' past':''}`;
+    const tag=isCur?'<span class="wk-tag tag-now">● Semana atual</span>':
+               isPast?'<span class="wk-tag tag-old">Concluída</span>':
+               '<span class="wk-tag tag-fut">Próxima</span>';
+    // compute week start date from EPCAr
+    const ws=new Date(D_EP); ws.setDate(ws.getDate()-s.n*7);
+    const we=new Date(ws); we.setDate(we.getDate()+6);
+    const fmt=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
+    const range=`${fmt(ws)} – ${fmt(we)}`;
+    let tasks='';
+    let wDone=0;
+    s.tasks.forEach((t,i)=>{
+      const id=taskId(s.n,i);
+      const ck=localStorage.getItem(id)==='1';
+      if(ck)wDone++;
+      const priCls=t.p==='a'?'pri pri-a':t.p==='m'?'pri pri-m':'pri pri-b';
+      const priLbl=t.p==='a'?'ALTA':t.p==='m'?'MÉDIA':'BAIXA';
+      tasks+=`<li class="task${ck?' done':''}">
+        <input type="checkbox" id="${id}" ${ck?'checked':''} onchange="saveTask('${id}',${s.tasks.length},${s.n})">
+        <label for="${id}">${t.t}</label>
+        <span class="${priCls}">${priLbl}</span>
+      </li>`;
+    });
+    const wPct=s.tasks.length?Math.round(wDone/s.tasks.length*100):0;
+    html+=`<div class="${cls}" id="wk${s.n}">
+      <div class="wk-hdr" onclick="toggleWk('wk${s.n}')">
+        <div class="wk-num">${s.n}</div>
+        <div class="wk-info">
+          <div class="wk-title">${s.titulo}</div>
+          <div class="wk-foco">${s.foco}</div>
+        </div>
+        <div class="wk-meta">${tag}<span class="wk-arrow">▼</span></div>
+      </div>
+      <div class="wk-body">
+        <ul class="task-list">${tasks}</ul>
+        <div class="wk-prog"><div class="wk-prog-fill" style="width:${wPct}%" id="wkp${s.n}"></div></div>
+      </div>
+    </div>`;
+  });
+  cont.innerHTML=html;
+}
+
+function saveTask(id,nTasks,semN){
+  const el=document.getElementById(id);
+  localStorage.setItem(id,el.checked?'1':'0');
+  // update task row style
+  el.closest('.task')?.classList.toggle('done',el.checked);
+  // update week progress bar
+  let done=0;
+  const sem=SEMANAS.find(s=>s.n===semN);
+  if(sem){sem.tasks.forEach((_,i)=>{if(localStorage.getItem(taskId(semN,i))==='1')done++;});}
+  const pct=nTasks?Math.round(done/nTasks*100):0;
+  const bar=document.getElementById('wkp'+semN);
+  if(bar)bar.style.width=pct+'%';
+  renderIndicadores();
+  showToast(el.checked?'✓ Tarefa concluída':'↩ Tarefa desmarcada');
+}
+
+function toggleWk(id){document.getElementById(id)?.classList.toggle('open')}
+
+// ── INIT ─────────────────────────────────────────────
+updateAll();
+setInterval(updateAll,3600000);
+renderSemanas();
+renderIndicadores();
+</script>
+</body>
+</html>
