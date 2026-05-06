@@ -1074,9 +1074,7 @@ function _renderRk(data,cont){
     const xp=r.xp||0;
     const pct=Math.round((xp/maxXP)*100);
     let posto='—';
-    if(typeof getRankIdx!=='undefined'&&typeof RANKS!=='undefined'){
-      posto=RANKS[getRankIdx(xp)].marinha;
-    }
+    try{posto=RANKS[getRankIdx(xp)].marinha;}catch(_){}
     html+='<tr class="'+(isMe?'rk-me':'')+'"><td>'+(medals[i]||(i+1))+'</td>'
       +'<td>'+r.nome+(isMe?' <small style="color:var(--teal)">(você)</small>':'')+'</td>'
       +'<td style="font-size:11px;color:var(--teal);font-weight:700">'+posto+'</td>'
@@ -1578,9 +1576,10 @@ function saveMeta(id){
   const el=document.getElementById(id);
   localStorage.setItem(id,el.checked?'1':'0');
   renderMetas();
-  const rkTab=document.getElementById('tab-ranking');
-  if(rkTab&&!rkTab.classList.contains('hidden')){renderPostoCard();renderRankTable();}
+  renderPostoCard();
+  renderRankTable();
   showToast(el.checked?'✓ Meta concluída! +20 XP':'↩ Meta desmarcada');
+  syncRanking();
 }
 
 // ── RANKING TAB: LEADERBOARD ──
@@ -1594,11 +1593,12 @@ async function loadRankingTab(){
   }catch(e){cont.innerHTML='<div class="rk-empty">Erro ao carregar. Verifique a conexão.</div>';}
 }
 
-function initRankingTab(){
+async function initRankingTab(){
   renderPostoCard();renderRankTable();
   const h=parseFloat(localStorage.getItem('rfStudyHours')||0);
   const el=document.getElementById('stTotalHours');if(el)el.textContent=h.toFixed(1)+' h';
   _updateStDisplay();
+  await syncRanking();
   loadRankingTab();
 }
 
