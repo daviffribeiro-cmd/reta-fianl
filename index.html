@@ -447,19 +447,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 
   <div class="card">
-    <div class="card-h"><div class="card-h-bar"></div><span class="ico">💡</span><h2>Dicas Específicas — CN</h2></div>
-    <div class="card-b"><div class="tips-list">
-      <div class="tip"><span class="tip-ico">📐</span><div><strong>Matemática é o fator decisivo</strong><p>É a matéria com maior peso e maior poder de diferenciação. Errar sistematicamente em Matemática torna quase impossível compensar nas outras matérias. Priorize-a acima de tudo.</p></div></div>
-      <div class="tip"><span class="tip-ico">🗓️</span><div><strong>Simule os dois dias em sequência</strong><p>O CN tem dois dias de prova. A resistência cognitiva importa: treine fazendo os dois dias de uma vez na mesma tarde/noite para preparar o corpo e a mente.</p></div></div>
-      <div class="tip"><span class="tip-ico">🧩</span><div><strong>Entenda o conceito antes do exercício</strong><p>Em Ciências (Física, Química, Biologia) entender o "por quê" é mais eficiente do que decorar. Um conceito compreendido resolve 5 questões; uma fórmula decorada, só uma.</p></div></div>
-      <div class="tip"><span class="tip-ico">📜</span><div><strong>História e Geografia: mapas mentais e linhas do tempo</strong><p>Crie uma linha do tempo visual dos períodos históricos e um mapa mental dos temas geográficos. Informação visual é retida mais facilmente do que texto corrido.</p></div></div>
-      <div class="tip"><span class="tip-ico">✏️</span><div><strong>Português: pratique identificar termos</strong><p>Termos integrantes e classes gramaticais aparecem em quase todos os anos. Faça o exercício de "dissecar" frases de provas antigas — é o treinamento mais direto.</p></div></div>
-      <div class="tip"><span class="tip-ico">🎯</span><div><strong>Na prova: questões certas primeiro</strong><p>Leia todas as questões, resolva primeiro as que tem certeza, marque as dúvidosas e volte. Não perca tempo travado em uma questão difícil quando há pontos garantidos para fazer.</p></div></div>
-      <div class="tip"><span class="tip-ico">💧</span><div><strong>Hidratação e alimentação no dia da prova</strong><p>Café da manhã leve e nutritivo. Leve água e um lanche pequeno. Desidratação e queda de glicose prejudicam a concentração nas últimas horas de prova.</p></div></div>
-    </div></div>
-  </div>
-
-  <div class="card">
     <div class="card-h"><div class="card-h-bar"></div><span class="ico">📋</span><h2>Planejamento CN · +15 XP por tópico</h2></div>
     <div class="card-b">
       <div id="cnCurrContainer"></div>
@@ -538,20 +525,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
           <button class="prova-btn btn-un" onclick="pdf('cpcar2018_prova_a.pdf','epcar')">📄 Prova — Versão A</button></div></div>
       </div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-h"><div class="card-h-bar"></div><span class="ico">💡</span><h2>Dicas Específicas — EPCAr</h2></div>
-    <div class="card-b"><div class="tips-list">
-      <div class="tip"><span class="tip-ico">📐</span><div><strong>Matemática e Redação são os pilares</strong><p>São as disciplinas com maior capacidade de diferenciação. Uma Redação bem estruturada + boa pontuação em Matemática coloca o candidato na faixa de classificados.</p></div></div>
-      <div class="tip"><span class="tip-ico">✍️</span><div><strong>Escreva uma redação por semana — sem exceção</strong><p>A redação melhora com prática sistemática. Escreva toda semana, corrija com critério (tese, argumentos, proposta de intervenção, coesão) e monitore a evolução.</p></div></div>
-      <div class="tip"><span class="tip-ico">📝</span><div><strong>Planeje a redação antes de escrever</strong><p>Reserve 5 minutos antes de começar para esboçar: tema central, 2 argumentos e a proposta de intervenção. Quem planeja escreve mais rápido e com mais coerência.</p></div></div>
-      <div class="tip"><span class="tip-ico">📖</span><div><strong>Português: foco em reescrita e substituição</strong><p>A EPCAr tem questões típicas de reescrever frases sem alterar o sentido e substituir termos. Treine com provas anteriores — o padrão se repete muito.</p></div></div>
-      <div class="tip"><span class="tip-ico">🇬🇧</span><div><strong>Inglês: interpretação vale mais que gramática</strong><p>A maioria dos pontos vem de interpretação de texto, não de gramática isolada. Pratique leitura de textos em inglês todos os dias — artigos, notícias curtas ou questões de provas.</p></div></div>
-      <div class="tip"><span class="tip-ico">📊</span><div><strong>Função quadrática aparece todo ano</strong><p>Sem exceção nas últimas edições. Domine: discriminante, vértice, gráfico (concavidade, zeros, valor mínimo/máximo). São os pontos mais fáceis de garantir em Matemática.</p></div></div>
-      <div class="tip"><span class="tip-ico">🎯</span><div><strong>Na prova: gerencie o tempo com firmeza</strong><p>Calcule quanto tempo tem por questão antes de começar. Se travar, pule e volte. Nunca fique mais de 3 minutos em uma questão sem avançar.</p></div></div>
-      <div class="tip"><span class="tip-ico">🏃</span><div><strong>Preparo físico importa</strong><p>O exame físico é a 2ª etapa. Se classificar na 1ª fase, você terá semanas para preparar. Manter hábito de atividade física desde agora facilita o processo.</p></div></div>
-    </div></div>
   </div>
 
   <div class="card">
@@ -1073,7 +1046,7 @@ async function syncRanking(){
     await fetch(SB_URL+'/rest/v1/ranking',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify({device_key:_devKey(),nome,unidade,tarefas:c.done,provas,atualizado:new Date().toISOString()})
+      body:JSON.stringify({device_key:_devKey(),nome,unidade,tarefas:c.done,provas,xp:typeof calcXP==='function'?calcXP():0,atualizado:new Date().toISOString()})
     });
   }catch(e){}
 }
@@ -1083,7 +1056,7 @@ async function loadRanking(){
   if(!SB_URL||!SB_KEY){_renderLocalRk(cont);return;}
   cont.innerHTML='<div class="rk-empty">Carregando...</div>';
   try{
-    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=tarefas.desc,provas.desc&limit=50',{
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=50',{
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
     });
     _renderRk(await r.json(),cont);
@@ -1094,12 +1067,22 @@ function _renderRk(data,cont){
   if(!data||!data.length){cont.innerHTML='<div class="rk-empty">Nenhum participante ainda.<br>Complete tarefas e provas para aparecer aqui!</div>';return;}
   const myKey=_devKey();
   const medals=['🥇','🥈','🥉'];
-  const maxT=Math.max(1,data[0]?.tarefas||0);
-  let html='<div style="overflow-x:auto"><table class="rk-table"><thead><tr><th>#</th><th>Nome</th><th>Unidade</th><th>Tarefas</th><th>Provas</th></tr></thead><tbody>';
+  const maxXP=Math.max(1,data[0]?.xp||1);
+  let html='<div style="overflow-x:auto"><table class="rk-table"><thead><tr><th>#</th><th>Nome</th><th>Posto</th><th>Unidade</th><th>XP</th></tr></thead><tbody>';
   data.forEach(function(r,i){
     const isMe=r.device_key===myKey;
-    const pct=Math.round((r.tarefas/maxT)*100);
-    html+='<tr class="'+(isMe?'rk-me':'')+'"><td>'+(medals[i]||(i+1))+'</td><td>'+r.nome+(isMe?' <small style="color:var(--teal)">(você)</small>':'')+'</td><td>'+r.unidade+'</td><td><b>'+r.tarefas+'</b><div class="rk-prog"><div class="rk-prog-bar" style="width:'+pct+'%"></div></div></td><td><b>'+r.provas+'</b></td></tr>';
+    const xp=r.xp||0;
+    const pct=Math.round((xp/maxXP)*100);
+    let posto='—';
+    if(typeof getRankIdx!=='undefined'&&typeof RANKS!=='undefined'){
+      posto=RANKS[getRankIdx(xp)].marinha;
+    }
+    html+='<tr class="'+(isMe?'rk-me':'')+'"><td>'+(medals[i]||(i+1))+'</td>'
+      +'<td>'+r.nome+(isMe?' <small style="color:var(--teal)">(você)</small>':'')+'</td>'
+      +'<td style="font-size:11px;color:var(--teal);font-weight:700">'+posto+'</td>'
+      +'<td>'+r.unidade+'</td>'
+      +'<td><b>'+xp+'</b><div class="rk-prog"><div class="rk-prog-bar" style="width:'+pct+'%"></div></div></td>'
+      +'</tr>';
   });
   cont.innerHTML=html+'</tbody></table></div>';
 }
@@ -1606,7 +1589,7 @@ async function loadRankingTab(){
   if(!SB_URL||!SB_KEY){cont.innerHTML='<div class="rk-empty">Conecte o Supabase para ver o ranking de todos os alunos.</div>';return;}
   cont.innerHTML='<div class="rk-empty">Carregando...</div>';
   try{
-    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=tarefas.desc,provas.desc&limit=50',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=50',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
     _renderRk(await r.json(),cont);
   }catch(e){cont.innerHTML='<div class="rk-empty">Erro ao carregar. Verifique a conexão.</div>';}
 }
