@@ -710,11 +710,21 @@ function pdf(n,tipo){
   const titles={cn1:'CPACN – 1º Dia  ·  Mat + Ingl',cn2:'CPACN – 2º Dia  ·  Port + Soc + Ciê',epcar:'EPCAr – Dia Único'};
   const secs={cn1:5*3600,cn2:5*3600,epcar:4*3600};
   document.getElementById('tExamTitle').textContent=titles[tipo]||'Simulado';
-  _tSecs=secs[tipo]||5*3600; _tRunning=false;
-  clearInterval(_tInt); _tInt=null;
+  var savedEnd=parseInt(localStorage.getItem('rfTEndAt')||0);
+  var savedTipo=localStorage.getItem('rfTTipo')||'';
+  var remaining=savedEnd?Math.ceil((savedEnd-Date.now())/1000):0;
+  if(savedTipo===tipo&&remaining>0){
+    _tSecs=remaining;
+    document.getElementById('tBtnGo').textContent='▶ Continuar';
+    document.getElementById('tLabel').textContent='Timer retomado — clique ▶ para continuar';
+  }else{
+    localStorage.removeItem('rfTEndAt');
+    clearInterval(_tInt);_tInt=null;_tRunning=false;
+    _tSecs=secs[tipo]||5*3600;
+    document.getElementById('tBtnGo').textContent='▶ Iniciar';
+    document.getElementById('tLabel').textContent='Tempo disponível';
+  }
   _updateTDisplay();
-  document.getElementById('tBtnGo').textContent='▶ Iniciar';
-  document.getElementById('tLabel').textContent='Tempo disponível';
   document.getElementById('moTimer').style.display='flex';
 }
 
@@ -913,6 +923,35 @@ setInterval(updateAll,3600000);
 renderSemanas();
 renderIndicadores();
 document.addEventListener('DOMContentLoaded',_firstVisit);
+document.addEventListener('DOMContentLoaded',function(){
+  // Restaurar cronômetro de estudos
+  if(localStorage.getItem('rfStStart')){
+    _stRunning=true;
+    _stInt=setInterval(function(){_updateStDisplay();},1000);
+    var btn=document.getElementById('stBtnGo');if(btn)btn.textContent='⏸ Pausar';
+  }
+  _updateStDisplay();
+  var h=parseFloat(localStorage.getItem('rfStudyHours')||0);
+  var el=document.getElementById('stTotalHours');if(el)el.textContent=h.toFixed(1)+' h';
+  // Restaurar timer de prova
+  var endAt=parseInt(localStorage.getItem('rfTEndAt')||0);
+  if(endAt){
+    var remaining=Math.ceil((endAt-Date.now())/1000);
+    if(remaining>0){
+      _tPDF=localStorage.getItem('rfTPDF')||'';
+      _tTipo=localStorage.getItem('rfTTipo')||'cn1';
+      _tSecs=remaining;
+      const titles={cn1:'CPACN – 1º Dia  ·  Mat + Ingl',cn2:'CPACN – 2º Dia  ·  Port + Soc + Ciê',epcar:'EPCAr – Dia Único'};
+      var et=document.getElementById('tExamTitle');if(et)et.textContent=titles[_tTipo]||'Simulado';
+      var tb=document.getElementById('tBtnGo');if(tb)tb.textContent='▶ Continuar';
+      var tl=document.getElementById('tLabel');if(tl)tl.textContent='Timer retomado — clique ▶ para continuar';
+      _updateTDisplay();
+      document.getElementById('moTimer').style.display='flex';
+    }else{
+      localStorage.removeItem('rfTEndAt');
+    }
+  }
+});
 // ══════════════════════════════════════════════════
 // SUPABASE CONFIG
 // Para ranking funcionar entre dispositivos:
@@ -974,20 +1013,33 @@ function _firstVisit(){
   else{_updateChip();syncRanking();}
 }
 
-// ── TIMER ────────────────────────────────────────
+// ── TIMER DE PROVA (persistente) ────────────────────
 let _tInt=null,_tSecs=0,_tRunning=false,_tPDF='',_tTipo='cn1';
 
+function _tComputeSecs(){
+  var endAt=parseInt(localStorage.getItem('rfTEndAt')||0);
+  if(!endAt)return _tSecs;
+  var r=Math.ceil((endAt-Date.now())/1000);
+  return Math.max(0,r);
+}
 function timerToggle(){
   if(_tRunning){
+    _tSecs=_tComputeSecs();
     clearInterval(_tInt);_tInt=null;_tRunning=false;
+    localStorage.removeItem('rfTEndAt');
     document.getElementById('tBtnGo').textContent='▶ Continuar';
   }else{
     _tRunning=true;
+    localStorage.setItem('rfTEndAt',(Date.now()+_tSecs*1000).toString());
+    localStorage.setItem('rfTPDF',_tPDF);
+    localStorage.setItem('rfTTipo',_tTipo);
     document.getElementById('tBtnGo').textContent='⏸ Pausar';
     _tInt=setInterval(function(){
-      if(_tSecs>0){_tSecs--;_updateTDisplay();}
-      else{
+      _tSecs=_tComputeSecs();
+      _updateTDisplay();
+      if(_tSecs<=0){
         clearInterval(_tInt);_tInt=null;_tRunning=false;
+        localStorage.removeItem('rfTEndAt');
         document.getElementById('tLabel').textContent='⏰ Tempo esgotado!';
       }
     },1000);
@@ -996,6 +1048,7 @@ function timerToggle(){
 
 function timerReset(){
   clearInterval(_tInt);_tInt=null;_tRunning=false;
+  localStorage.removeItem('rfTEndAt');
   const secs={cn1:5*3600,cn2:5*3600,epcar:4*3600};
   _tSecs=secs[_tTipo]||5*3600;
   _updateTDisplay();
@@ -1004,11 +1057,12 @@ function timerReset(){
 }
 
 function _updateTDisplay(){
-  const h=Math.floor(_tSecs/3600).toString().padStart(2,'0');
-  const m=Math.floor((_tSecs%3600)/60).toString().padStart(2,'0');
-  const s=(_tSecs%60).toString().padStart(2,'0');
+  var secs=_tRunning?_tComputeSecs():_tSecs;
+  const h=Math.floor(secs/3600).toString().padStart(2,'0');
+  const m=Math.floor((secs%3600)/60).toString().padStart(2,'0');
+  const s=(secs%60).toString().padStart(2,'0');
   const el=document.getElementById('tDisplay');
-  if(el){el.textContent=h+':'+m+':'+s;el.className='t-num'+(_tSecs<300&&_tSecs>0?' t-warn':'');}
+  if(el){el.textContent=h+':'+m+':'+s;el.className='t-num'+(secs<300&&secs>0?' t-warn':'');}
 }
 
 function timerOpenPDF(){
@@ -1017,6 +1071,7 @@ function timerOpenPDF(){
 
 function timerDone(){
   clearInterval(_tInt);_tInt=null;_tRunning=false;
+  localStorage.removeItem('rfTEndAt');
   document.getElementById('moTimer').style.display='none';
   const n=(parseInt(localStorage.getItem('rfProvas'))||0)+1;
   localStorage.setItem('rfProvas',n);
@@ -1026,6 +1081,7 @@ function timerDone(){
 
 function closeTimer(){
   clearInterval(_tInt);_tInt=null;_tRunning=false;
+  localStorage.removeItem('rfTEndAt');
   document.getElementById('moTimer').style.display='none';
 }
 
@@ -1369,26 +1425,48 @@ const EP_CURR=[
   ]},
 ];
 
-// ── CRONÔMETRO DE ESTUDOS ──
-let _stInt=null,_stSecs=0,_stRunning=false;
-function stToggle(){
-  if(_stRunning){clearInterval(_stInt);_stInt=null;_stRunning=false;document.getElementById('stBtnGo').textContent='▶ Continuar';}
-  else{_stRunning=true;document.getElementById('stBtnGo').textContent='⏸ Pausar';_stInt=setInterval(function(){_stSecs++;_updateStDisplay();},1000);}
+// ── CRONÔMETRO DE ESTUDOS (persistente) ──
+let _stInt=null,_stRunning=false;
+function _stGetSecs(){
+  var base=parseInt(localStorage.getItem('rfStBase')||0);
+  var start=localStorage.getItem('rfStStart');
+  if(start)return base+Math.floor((Date.now()-parseInt(start))/1000);
+  return base;
 }
-function stReset(){clearInterval(_stInt);_stInt=null;_stRunning=false;_stSecs=0;_updateStDisplay();document.getElementById('stBtnGo').textContent='▶ Iniciar';}
+function stToggle(){
+  if(_stRunning){
+    localStorage.setItem('rfStBase',_stGetSecs());
+    localStorage.removeItem('rfStStart');
+    clearInterval(_stInt);_stInt=null;_stRunning=false;
+    document.getElementById('stBtnGo').textContent='▶ Continuar';
+  }else{
+    _stRunning=true;
+    localStorage.setItem('rfStStart',Date.now().toString());
+    document.getElementById('stBtnGo').textContent='⏸ Pausar';
+    _stInt=setInterval(function(){_updateStDisplay();},1000);
+  }
+}
+function stReset(){
+  clearInterval(_stInt);_stInt=null;_stRunning=false;
+  localStorage.removeItem('rfStStart');
+  localStorage.setItem('rfStBase','0');
+  _updateStDisplay();
+  document.getElementById('stBtnGo').textContent='▶ Iniciar';
+}
 function _updateStDisplay(){
-  const h=Math.floor(_stSecs/3600).toString().padStart(2,'0');
-  const m=Math.floor((_stSecs%3600)/60).toString().padStart(2,'0');
-  const s=(_stSecs%60).toString().padStart(2,'0');
+  var secs=_stGetSecs();
+  const h=Math.floor(secs/3600).toString().padStart(2,'0');
+  const m=Math.floor((secs%3600)/60).toString().padStart(2,'0');
+  const s=(secs%60).toString().padStart(2,'0');
   const el=document.getElementById('stDisplay');if(el)el.textContent=h+':'+m+':'+s;
 }
 function stSave(){
-  if(_stSecs===0){showToast('⚠️ Inicie o cronômetro antes de salvar');return;}
+  if(_stGetSecs()===0){showToast('⚠️ Inicie o cronômetro antes de salvar');return;}
   document.getElementById('moStudySubj').style.display='flex';
 }
 function stSaveConfirm(subj){
   document.getElementById('moStudySubj').style.display='none';
-  const h=_stSecs/3600;
+  const h=_stGetSecs()/3600;
   const prev=parseFloat(localStorage.getItem('rfStudyHours')||0);
   const total=prev+h;
   localStorage.setItem('rfStudyHours',total.toFixed(2));
