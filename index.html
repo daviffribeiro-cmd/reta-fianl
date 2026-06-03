@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Reta Final 2026 · Matriz Educação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -15,7 +18,7 @@
   --border:#b8e8d0;--gbg:#edf9f3;
   --red:#e53e3e;--amber:#d97706;--green:#16a34a;
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
+body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
 
 /* ── HEADER ── */
 .hdr{background:linear-gradient(135deg,#0b1a2b 0%,var(--navy) 55%,#1c3560 100%);padding:24px 20px 20px;position:relative;overflow:hidden}
@@ -263,12 +266,54 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .curr-item label{flex:1;font-size:12.5px;color:var(--t1);cursor:pointer;line-height:1.4}
 .curr-item.done label{color:var(--t3);text-decoration:line-through}
 .xp-pill{display:inline-flex;align-items:center;background:var(--grad);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0}
+
+/* ── HEADER ENHANCEMENTS ── */
+.hdr{padding-bottom:44px}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 44' preserveAspectRatio='none'%3E%3Cpath d='M0,22 C240,44 480,0 720,22 C960,44 1200,0 1440,22 L1440,44 L0,44 Z' fill='%23f5fefb'/%3E%3C/svg%3E") no-repeat bottom/100% 100%;pointer-events:none;z-index:1}
+.hdr-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(29,201,158,.08) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+
+/* ── SAVE DOT GLOW ── */
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px 3px rgba(29,201,158,.45)}50%{opacity:.3;box-shadow:0 0 0 0 transparent}}
+
+/* ── CARD-H GRADIENT SEPARATOR ── */
+.card-h{position:relative;border-bottom:none}
+.card-h::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--grad)}
+
+/* ── IND-ITEM ENHANCEMENTS ── */
+.ind-item{border-top:3px solid var(--teal) !important}
+.ind-item:hover{box-shadow:0 6px 20px rgba(29,201,158,.2) !important;transform:translateY(-2px)}
+
+/* ── TIPS GRADIENT BORDER ── */
+.tip{border-left:none;padding-left:20px;position:relative}
+.tip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad);border-radius:2px}
+
+/* ── PROVA CARD LATEST ── */
+.prova-card:first-child{border-top-color:var(--lime);box-shadow:0 0 0 1.5px rgba(132,212,60,.25)}
+
+/* ── FOOTER ── */
+.site-footer{background:linear-gradient(135deg,#0b1a2b,var(--navy));border-top:3px solid;border-image:var(--grad) 1;padding:22px 20px;margin-top:40px}
+.site-footer-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-brand{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:15px;font-weight:900;letter-spacing:1px}
+.footer-info{font-size:12px;color:rgba(255,255,255,.4);font-weight:500}
+.footer-pill{background:rgba(29,201,158,.12);border:1px solid rgba(29,201,158,.28);color:rgba(255,255,255,.6);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
+
+/* ── TABLET 768px ── */
+@media(max-width:768px){
+  .hdr-title{font-size:19px}
+  .hdr-chips{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .tab{padding:12px 14px;font-size:13px}
+  .ind-grid{grid-template-columns:repeat(2,1fr)}
+  .topics-grid{grid-template-columns:1fr 1fr}
+  .provas-grid{grid-template-columns:1fr 1fr}
+  .site-footer-inner{flex-direction:column;text-align:center}
+}
 </style>
 </head>
 <body>
 
 <!-- ══ HEADER ══ -->
 <header class="hdr">
+  <div class="hdr-dots"></div>
   <div class="hdr-inner">
     <img src="logo.jpg" class="hdr-logo" alt="Matriz">
     <div class="hdr-text">
@@ -1680,7 +1725,19 @@ async function initRankingTab(){
   loadRankingTab();
 }
 
-document.addEventListener('DOMContentLoaded',renderMetas);
+document.addEventListener('DOMContentLoaded',function(){
+  renderMetas();
+  // ── Cores por matéria nos topic cards ──
+  const cores={
+    'Matemática':'#16a34a','Português':'#2563eb','História':'#d97706',
+    'Geografia':'#0891b2','Física':'#7c3aed','Química':'#db2777',
+    'Biologia':'#059669','Inglês':'#ca8a04','Redação':'#dc2626'
+  };
+  document.querySelectorAll('.topic-card').forEach(function(card){
+    const txt=(card.querySelector('.topic-subj')||{}).textContent||'';
+    for(const k in cores){if(txt.includes(k)){card.style.borderTopColor=cores[k];break;}}
+  });
+});
 
 // ── OVERRIDE setTab (adiciona aba ranking) ──
 function setTab(t){
@@ -1695,6 +1752,24 @@ function setTab(t){
   if(t==='cn')renderCurriculum(CN_CURR,'cn','cnCurrContainer');
   if(t==='epcar')renderCurriculum(EP_CURR,'ep','epCurrContainer');
 }
+</script>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div>
+      <div class="footer-brand">Matriz Educação</div>
+      <div class="footer-info">Reta Final 2026 · CN + EPCAr · Sistema de Acompanhamento</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span class="footer-pill">⚓ CPACN · 01/08/2026</span>
+      <span class="footer-pill">✈️ EPCAr · 21/06/2026</span>
+    </div>
+    <div class="footer-info" id="footerDateRF"></div>
+  </div>
+</footer>
+<script>
+  var el=document.getElementById('footerDateRF');
+  if(el)el.textContent='Atualizado em: '+new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
 </script>
 </body>
 </html>
