@@ -258,6 +258,42 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
 .curr-subj-prog{font-size:12px;color:var(--teal);font-weight:700}
 .curr-subj-arrow{font-size:12px;color:var(--t3);transition:transform .2s}
 .curr-subj.open .curr-subj-arrow{transform:rotate(180deg)}
+
+/* ── HOME HERO (estilo Duolingo/Notion) ── */
+.home-card{background:linear-gradient(135deg,#0b1a2b 0%,var(--navy) 55%,#1c3560 100%);border-radius:20px;padding:26px 24px 24px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+.home-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 0%,rgba(29,201,158,.22) 0%,transparent 70%)}
+.home-inner{position:relative}
+.home-greet{font-size:21px;font-weight:900;color:#fff;margin-bottom:3px}
+.home-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:20px}
+.home-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.home-stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:12px 8px;text-align:center}
+.home-stat-ico{font-size:18px;margin-bottom:3px}
+.home-stat-num{font-size:19px;font-weight:900;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.home-stat-lbl{font-size:9.5px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+@media(max-width:480px){.home-stats{grid-template-columns:repeat(2,1fr)}}
+.home-prog-row{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px 18px}
+.home-ring{flex-shrink:0;width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+.home-ring-inner{position:absolute;inset:6px;border-radius:50%;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.home-ring-pct{font-size:16px;font-weight:900;color:#fff;line-height:1}
+.home-ring-lbl{font-size:7.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-top:1px}
+.home-obj-lbl{font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:4px}
+.home-obj-txt{font-size:14px;font-weight:600;color:#fff;line-height:1.4}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.ach-item{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px 8px;text-align:center;transition:transform .15s,box-shadow .15s}
+.ach-item.unlocked{border-color:var(--teal);background:linear-gradient(160deg,#fff,#edfbf6)}
+.ach-item.unlocked:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(29,201,158,.18)}
+.ach-item.locked{opacity:.45;filter:grayscale(1)}
+.ach-ico{font-size:26px;margin-bottom:6px}
+.ach-nome{font-size:10.5px;font-weight:700;color:var(--navy);line-height:1.25}
+.mission-card{background:linear-gradient(135deg,#fff,var(--gbg));border:1.5px solid var(--teal);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.mission-tag{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);margin-bottom:5px}
+.mission-txt{font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.35}
+.mission-reward{margin-left:auto;background:var(--grad);color:#fff;font-size:12px;font-weight:800;padding:8px 14px;border-radius:10px;white-space:nowrap}
+.mission-done{background:var(--navy)!important}
+.replay-card{background:var(--navy);border-radius:16px;padding:16px 20px;color:#fff;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.replay-stat{text-align:center}
+.replay-num{font-size:20px;font-weight:900;color:var(--teal)}
+.replay-lbl{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase}
 .curr-subj-body{display:none;padding:12px 16px}
 .curr-subj.open .curr-subj-body{display:block}
 .curr-items{list-style:none;display:flex;flex-direction:column;gap:5px}
@@ -325,7 +361,7 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
       <div class="hdr-chip" id="chipEP">
         <div class="hdr-chip-lbl">✈️ EPCAr</div>
         <div class="hdr-chip-num" id="chipEPnum">—</div>
-        <div class="hdr-chip-sub">dias · 21/06/2026</div>
+        <div class="hdr-chip-sub">concluída · 21/06/2026</div>
       </div>
       <div class="hdr-chip" id="chipCN">
         <div class="hdr-chip-lbl">⚓ CN 1º Dia</div>
@@ -355,6 +391,9 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
 <!-- ══════════ PLANO ══════════ -->
 <div id="tab-plano">
 
+  <!-- Home (estilo Duolingo/Notion) -->
+  <div id="homeHero"></div>
+
   <!-- Indicadores -->
   <div class="card">
     <div class="card-h"><div class="card-h-bar"></div><span class="ico">📊</span><h2>Indicadores de Progresso</h2></div>
@@ -371,8 +410,9 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
 
   <!-- Plano Semanal -->
   <div class="card">
-    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📅</span><h2>Plano Semanal — CN + EPCAr</h2></div>
+    <div class="card-h"><div class="card-h-bar"></div><span class="ico">📅</span><h2>Plano Semanal — Reta Final CN</h2></div>
     <div class="card-b">
+      <p class="src" style="margin-bottom:10px">✈️ EPCAr já foi concluída — o plano das últimas semanas agora é 100% focado no Colégio Naval (CPACN 01–02/08).</p>
       <div id="semAtualBadge"></div>
       <div class="week-list" id="weeksGeral"></div>
     </div>
@@ -710,28 +750,30 @@ const SEMANAS = [
     ]
   },
   {
-    n:3, titulo:'Simulação Intensiva + Revisão de Erros',
-    foco:'Provas 2020 (CN) e 2021 (EPCAr) · refazer pontos fracos',
+    n:3, titulo:'Últimas Provas + Fechamento de Lacunas',
+    foco:'Provas 2019 e 2017 (CN) · fechar as últimas lacunas antes do sprint final',
     tasks:[
-      {t:'⚓ CN 2020 — 1º Dia (Mat + Inglês) · com cronômetro', p:'a'},
-      {t:'⚓ CN 2020 — 2º Dia (Port + Est. Soc + Ciências) · com cronômetro', p:'a'},
-      {t:'✈️ EPCAr 2021 — resolver completa com cronômetro', p:'a'},
-      {t:'📊 Refazer todas as questões que errou nas semanas anteriores (CN + EPCAr)', p:'a'},
-      {t:'📖 CN: Revisar Física (temperatura, calor, refração da luz) e Bio (membrana plasmática)', p:'m'},
-      {t:'📖 Revisar tópicos com maior taxa de erro — identificados nas semanas anteriores', p:'a'},
-      {t:'✍️ EPCAr: Escrever 1 redação — avaliar desenvolvimento e conclusão', p:'a'},
+      {t:'⚓ CN 2019 — 1º Dia (Mat + Inglês) · resolver completa com cronômetro', p:'a'},
+      {t:'⚓ CN 2019 — 2º Dia (Port + Est. Soc + Ciências) · resolver completa com cronômetro', p:'a'},
+      {t:'⚓ CN 2017 — 1ª Fase (Mat + Inglês) · resolver completa com cronômetro', p:'a'},
+      {t:'📊 Catalogar os erros de todas as provas já resolvidas (2017–2025) e listar os 3 tópicos mais recorrentes de erro', p:'a'},
+      {t:'📖 Revisar os tópicos 🔥 de maior recorrência em todas as disciplinas (card "Tópicos que Mais Caem — CN")', p:'a'},
+      {t:'📖 Inglês: revisar tempos verbais, pronomes e vocabulário contextualizado', p:'m'},
+      {t:'✍️ Escrever 1 redação dissertativo-argumentativa cronometrada (tema livre) — avaliar tese, argumentos e proposta de intervenção', p:'a'},
     ]
   },
   {
-    n:2, titulo:'Sprint Final',
-    foco:'Provas 2020 e 2019 (EPCAr) · ficha de fórmulas · revisão geral',
+    n:2, titulo:'Sprint Final — Revisão por Disciplina',
+    foco:'Revisão intensiva de todas as disciplinas · refazer questões erradas · repetir a prova mais recente',
     tasks:[
-      {t:'✈️ EPCAr 2020 — resolver completa com cronômetro (foco nos pontos fracos)', p:'a'},
-      {t:'✈️ EPCAr 2019 — resolver completa com cronômetro', p:'a'},
-      {t:'✈️ EPCAr 2018 — resolver completa com cronômetro (reforço extra)', p:'m'},
-      {t:'📖 Montar ficha de fórmulas de Matemática — CN e EPCAr (folha A4)', p:'a'},
-      {t:'📖 Revisão final de todos os tópicos com maior taxa de erro (CN + EPCAr)', p:'a'},
-      {t:'✍️ EPCAr: Redação final — corrigir com critério e registrar evolução desde a semana 7', p:'a'},
+      {t:'📊 Refazer TODAS as questões que errou nas 9 provas anteriores (2017–2025) — sem exceção', p:'a'},
+      {t:'⚓ CN 2025 — repetir 1º e 2º Dia completos contra o tempo real de prova, para medir evolução', p:'a'},
+      {t:'📐 Matemática: revisão final — razão/proporção, função quadrática, áreas planas, semelhança de triângulos', p:'a'},
+      {t:'📖 Português: revisão final — concordância verbal/nominal, termos integrantes, emprego do "que", interpretação de texto', p:'a'},
+      {t:'📜 História e Geografia: revisão final — linha do tempo (Colônia → Era Vargas) e geografia econômica/população do Brasil', p:'a'},
+      {t:'⚡🧬⚗️ Ciências: revisão final — cinemática e Leis de Newton, tabela periódica e modelos atômicos, heredogramas e relações ecológicas', p:'a'},
+      {t:'📖 Montar ficha de fórmulas de Matemática (folha A4) para revisão na véspera', p:'m'},
+      {t:'✍️ Escrever a redação final e comparar a evolução com a da semana anterior', p:'a'},
     ]
   },
   {
@@ -739,9 +781,9 @@ const SEMANAS = [
     foco:'Zero conteúdo novo · mente descansada vale mais',
     tasks:[
       {t:'📖 Revisão leve da ficha de fórmulas (máx. 30 min) — nada de conteúdo novo!', p:'a'},
-      {t:'📖 EPCAr: Reler a melhor redação que escreveu para ativar o repertório', p:'m'},
-      {t:'✈️ Confirmar local, horário e documentos da prova EPCAr (edital FAB)', p:'a'},
-      {t:'⚓ Confirmar local, horário e documentos da prova CN (edital Marinha)', p:'a'},
+      {t:'📖 Reler a redação com a melhor nota para ativar o repertório', p:'m'},
+      {t:'🧠 Revisão relâmpago dos tópicos 🔥 de maior recorrência (máx. 15 min por disciplina)', p:'m'},
+      {t:'⚓ Confirmar local, horário e documentos da prova CN — 1º Dia (01/08) e 2º Dia (02/08), edital Marinha', p:'a'},
       {t:'📦 Preparar kit: RG/identidade, caneta preta ou azul, lápis, borracha, lanche, água', p:'a'},
       {t:'😴 Dormir às 21h — mínimo 8h de sono antes de cada dia de prova', p:'a'},
     ]
@@ -809,7 +851,7 @@ function buildCD(id,alvo){
 function updateChips(){
   const ep=diasH(D_EP), cn=diasH(D_CN);
   const ce=document.getElementById('chipEPnum'), cc=document.getElementById('chipCNnum');
-  if(ce) ce.textContent=ep.total>0?ep.total:'🎯';
+  if(ce) ce.textContent=ep.total>0?ep.total:'✅';
   if(cc) cc.textContent=cn.total>0?cn.total:'🎯';
   document.getElementById('chipEP')?.classList.toggle('urgent',ep.total<=7);
   document.getElementById('chipCN')?.classList.toggle('urgent',cn.total<=7);
@@ -829,7 +871,7 @@ function showToast(msg='✓ Progresso salvo'){
 function diasRest(alvo){
   const ms=new Date(alvo)-new Date(); return Math.max(0,Math.ceil(ms/86400000));
 }
-function semanasRest(){ return Math.ceil(diasRest(D_EP)/7); }
+function semanasRest(){ return Math.ceil(diasRest(D_CN)/7); }
 
 function taskId(n,i){ return `g-s${n}-t${i}` }
 
@@ -890,7 +932,7 @@ function renderIndicadores(){
 function renderSemanas(){
   const semAtual=Math.min(8,Math.max(1,semanasRest()));
   const badge=document.getElementById('semAtualBadge');
-  if(badge) badge.innerHTML=`<div class="sem-atual-badge">📍 Você está na Semana ${semAtual} de 8</div>`;
+  if(badge) badge.innerHTML=`<div class="sem-atual-badge">📍 Você está na Semana ${semAtual} — Reta Final CN</div>`;
   const cont=document.getElementById('weeksGeral');
   let html='';
   const sorted=[
@@ -905,8 +947,8 @@ function renderSemanas(){
     const tag=isCur?'<span class="wk-tag tag-now">● Semana atual</span>':
                isPast?'<span class="wk-tag tag-old">Concluída</span>':
                '<span class="wk-tag tag-fut">Próxima</span>';
-    // compute week start date from EPCAr
-    const ws=new Date(D_EP); ws.setDate(ws.getDate()-s.n*7);
+    // compute week start date counting back from the CN exam (reta final agora é só CN)
+    const ws=new Date(D_CN); ws.setDate(ws.getDate()-s.n*7);
     const we=new Date(ws); we.setDate(we.getDate()+6);
     const fmt=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
     const range=`${fmt(ws)} – ${fmt(we)}`;
@@ -956,8 +998,10 @@ function saveTask(id,nTasks,semN){
   const bar=document.getElementById('wkp'+semN);
   if(bar)bar.style.width=pct+'%';
   renderIndicadores();
+  if(el.checked)_markStudyDay();
+  if(typeof renderHome==='function')renderHome();
   showToast(el.checked?'✓ Tarefa concluída':'↩ Tarefa desmarcada');
-  syncRanking();
+  syncTudo();
 }
 
 function toggleWk(id){document.getElementById(id)?.classList.toggle('open')}
@@ -1003,44 +1047,118 @@ document.addEventListener('DOMContentLoaded',function(){
 // 1. Crie conta GRATUITA em supabase.com
 // 2. Crie projeto → SQL Editor → rode:
 //    CREATE TABLE ranking (
-//      device_key text PRIMARY KEY,
+//      device_key text PRIMARY KEY,   -- agora é nome+unidade+código (não mais 1 ID por aparelho)
 //      nome text, unidade text,
-//      tarefas int DEFAULT 0, provas int DEFAULT 0,
+//      tarefas int DEFAULT 0, provas int DEFAULT 0, xp int DEFAULT 0,
+//      progresso jsonb,               -- snapshot completo do progresso do aluno (sincroniza celular/PC)
 //      atualizado timestamptz DEFAULT now()
 //    );
 //    ALTER TABLE ranking ENABLE ROW LEVEL SECURITY;
 //    CREATE POLICY "r" ON ranking FOR SELECT USING (true);
 //    CREATE POLICY "w" ON ranking FOR INSERT WITH CHECK (true);
 //    CREATE POLICY "u" ON ranking FOR UPDATE USING (true);
+// Se a tabela já existir de antes, basta rodar:
+//    ALTER TABLE ranking ADD COLUMN IF NOT EXISTS progresso jsonb;
 // 3. Settings → API → cole os valores abaixo:
 const SB_URL = 'https://vtdsogswketobuipvhuw.supabase.co';
 const SB_KEY = 'sb_publishable_N1M8SCLg6SDbCW9pyGDT9Q_XVtkN5hN';
 // ══════════════════════════════════════════════════
 
 // ── ALUNO ────────────────────────────────────────
+// Identidade estável do aluno (nome + unidade + código) — é essa chave, e não
+// mais um ID aleatório por aparelho, que carrega o progresso entre celular e PC.
 function _devKey(){
   let k=localStorage.getItem('rfDK');
   if(!k){k=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('rfDK',k);}
   return k;
 }
-function _getStu(){return{nome:localStorage.getItem('rfNome')||'',unidade:localStorage.getItem('rfUnidade')||''};}
+function _slug(s){
+  return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'').trim();
+}
+function _alunoKey(){
+  return _slug(localStorage.getItem('rfNome'))+'_'+_slug(localStorage.getItem('rfUnidade'))+'_'+_slug(localStorage.getItem('rfCodigo'));
+}
+function _getStu(){return{nome:localStorage.getItem('rfNome')||'',unidade:localStorage.getItem('rfUnidade')||'',codigo:localStorage.getItem('rfCodigo')||''};}
 
-function saveStudent(){
+// Tudo que conta como "progresso" do aluno (tarefas, metas, currículo, notas,
+// horas de estudo etc.) é salvo como um snapshot único, para restaurar em
+// qualquer aparelho onde o mesmo nome+unidade+código façam login.
+const _SNAP_BLACKLIST=['rfDK','rfTEndAt','rfTPDF','rfTTipo','rfStStart','rfLastSync'];
+function _buildSnapshot(){
+  const snap={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(!k||_SNAP_BLACKLIST.indexOf(k)!==-1)continue;
+    if(k.indexOf('rf')===0||k.indexOf('meta_')===0||k.indexOf('cn_')===0||k.indexOf('ep_')===0||k.indexOf('g-s')===0){
+      snap[k]=localStorage.getItem(k);
+    }
+  }
+  return snap;
+}
+function _applySnapshot(snap){
+  if(!snap)return;
+  Object.keys(snap).forEach(function(k){try{localStorage.setItem(k,snap[k]);}catch(e){}});
+}
+
+async function _pullProgress(){
+  if(!SB_URL||!SB_KEY)return false;
+  const key=_alunoKey();
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/ranking?device_key=eq.'+encodeURIComponent(key)+'&select=progresso,atualizado',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    const rows=await r.json();
+    if(rows&&rows[0]&&rows[0].progresso){
+      const cloud=typeof rows[0].progresso==='string'?JSON.parse(rows[0].progresso):rows[0].progresso;
+      _applySnapshot(cloud);
+      localStorage.setItem('rfLastSync',rows[0].atualizado||new Date().toISOString());
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+// Ao voltar ao site (aparelho já cadastrado), verifica se existe um progresso
+// mais recente na nuvem (feito em outro aparelho) e, se houver, traz para cá.
+async function _checkCloudUpdate(){
+  if(!SB_URL||!SB_KEY){syncTudo();return;}
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/ranking?device_key=eq.'+encodeURIComponent(_alunoKey())+'&select=progresso,atualizado',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    const rows=await r.json();
+    const cloudTime=rows&&rows[0]?Date.parse(rows[0].atualizado||0)||0:0;
+    const localTime=Date.parse(localStorage.getItem('rfLastSync')||0)||0;
+    if(rows&&rows[0]&&rows[0].progresso&&cloudTime>localTime+5000){
+      _applySnapshot(typeof rows[0].progresso==='string'?JSON.parse(rows[0].progresso):rows[0].progresso);
+      localStorage.setItem('rfLastSync',rows[0].atualizado);
+      location.reload();
+      return;
+    }
+  }catch(e){}
+  syncTudo();
+}
+
+async function saveStudent(){
   const nome=(document.getElementById('inpNome').value||'').trim();
   const unidade=document.getElementById('inpUnidade').value;
+  const codigo=(document.getElementById('inpCodigo').value||'').trim();
   if(!nome){document.getElementById('inpNome').focus();return;}
   if(!unidade){document.getElementById('inpUnidade').focus();return;}
+  if(!codigo){document.getElementById('inpCodigo').focus();return;}
   localStorage.setItem('rfNome',nome);
   localStorage.setItem('rfUnidade',unidade);
+  localStorage.setItem('rfCodigo',codigo);
   document.getElementById('moSetup').style.display='none';
+  showToast('🔄 Buscando seu progresso...');
+  const trouxe=await _pullProgress();
   _updateChip();
-  syncRanking();
+  syncTudo();
+  if(trouxe){location.reload();}
+  else{renderIndicadores();renderMetas();renderSemanas();renderPostoCard();renderRankTable();if(typeof renderHome==='function')renderHome();}
 }
 
 function editStudent(){
   const s=_getStu();
   document.getElementById('inpNome').value=s.nome;
   document.getElementById('inpUnidade').value=s.unidade;
+  document.getElementById('inpCodigo').value=s.codigo;
   document.getElementById('moSetup').style.display='flex';
   document.getElementById('moRanking').style.display='none';
 }
@@ -1055,7 +1173,7 @@ function _updateChip(){
 function _firstVisit(){
   const{nome}=_getStu();
   if(!nome)document.getElementById('moSetup').style.display='flex';
-  else{_updateChip();syncRanking();}
+  else{_updateChip();_checkCloudUpdate();}
 }
 
 // ── TIMER DE PROVA (persistente) ────────────────────
@@ -1114,14 +1232,73 @@ function timerOpenPDF(){
   if(_tPDF)window.open('./'+encodeURIComponent(_tPDF),'_blank');
 }
 
+const EXAM_TOTALS={cn1:40,cn2:50,epcar:48};
+const EXAM_NAMES={cn1:'CPACN – 1º Dia (Mat + Inglês)',cn2:'CPACN – 2º Dia (Port + Soc + Ciências)',epcar:'EPCAr – Dia Único'};
+
 function timerDone(){
   clearInterval(_tInt);_tInt=null;_tRunning=false;
   localStorage.removeItem('rfTEndAt');
-  document.getElementById('moTimer').style.display='none';
+  const total=EXAM_TOTALS[_tTipo]||40;
+  document.getElementById('scoreExamName').textContent=EXAM_NAMES[_tTipo]||'Simulado';
+  document.getElementById('scoreTotal').textContent=total;
+  const inp=document.getElementById('inpAcertos');
+  inp.setAttribute('max',total);inp.value='';
+  document.getElementById('tCore').style.display='none';
+  document.getElementById('moScoreStep').style.display='block';
+  setTimeout(function(){inp.focus();},50);
+}
+
+function skipScore(){
   const n=(parseInt(localStorage.getItem('rfProvas'))||0)+1;
   localStorage.setItem('rfProvas',n);
+  _markStudyDay();
   showToast('✓ Prova concluída! +1 no ranking');
-  syncRanking();
+  _closeAfterExam();
+}
+
+function saveExamScore(){
+  const total=EXAM_TOTALS[_tTipo]||40;
+  let acertos=parseInt(document.getElementById('inpAcertos').value);
+  if(isNaN(acertos)||acertos<0)acertos=0;
+  if(acertos>total)acertos=total;
+  const notas=JSON.parse(localStorage.getItem('rfNotas')||'[]');
+  notas.push({tipo:_tTipo,nome:EXAM_NAMES[_tTipo]||'Simulado',total,acertos,pct:Math.round(acertos/total*100),data:new Date().toISOString()});
+  localStorage.setItem('rfNotas',JSON.stringify(notas));
+  const n=(parseInt(localStorage.getItem('rfProvas'))||0)+1;
+  localStorage.setItem('rfProvas',n);
+  _markStudyDay();
+  showToast('✓ Resultado salvo: '+acertos+'/'+total+' ('+Math.round(acertos/total*100)+'%)');
+  _closeAfterExam();
+}
+
+function _closeAfterExam(){
+  document.getElementById('moTimer').style.display='none';
+  document.getElementById('moScoreStep').style.display='none';
+  document.getElementById('tCore').style.display='';
+  renderIndicadores();
+  if(typeof renderHome==='function')renderHome();
+  syncTudo();
+}
+
+// ── SEQUÊNCIA DE DIAS ESTUDADOS (streak) ──
+function _markStudyDay(){
+  const days=JSON.parse(localStorage.getItem('rfStreakDays')||'[]');
+  const today=new Date().toISOString().slice(0,10);
+  if(days.indexOf(today)===-1){days.push(today);localStorage.setItem('rfStreakDays',JSON.stringify(days));}
+}
+function calcStreak(){
+  const days=JSON.parse(localStorage.getItem('rfStreakDays')||'[]').slice().sort();
+  if(!days.length)return 0;
+  const today=new Date(),y=new Date(Date.now()-86400000);
+  const todayStr=today.toISOString().slice(0,10),yestStr=y.toISOString().slice(0,10);
+  const last=days[days.length-1];
+  if(last!==todayStr&&last!==yestStr)return 0;
+  let streak=1;
+  for(let i=days.length-1;i>0;i--){
+    const diff=Math.round((new Date(days[i])-new Date(days[i-1]))/86400000);
+    if(diff===1)streak++;else if(diff===0)continue;else break;
+  }
+  return streak;
 }
 
 function closeTimer(){
@@ -1137,18 +1314,28 @@ function openRanking(){
 }
 function closeRanking(){document.getElementById('moRanking').style.display='none';}
 
-async function syncRanking(){
+let _syncTimer=null;
+function syncTudo(){
+  clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(_syncNow,700);
+}
+// Mantido por compatibilidade com qualquer chamada antiga a syncRanking()
+function syncRanking(){syncTudo();}
+
+async function _syncNow(){
   if(!SB_URL||!SB_KEY)return;
   const{nome,unidade}=_getStu();
   if(!nome)return;
   const c=countTasks();
   const provas=parseInt(localStorage.getItem('rfProvas'))||0;
+  const agora=new Date().toISOString();
   try{
     await fetch(SB_URL+'/rest/v1/ranking',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify({device_key:_devKey(),nome,unidade,tarefas:c.done,provas,xp:typeof calcXP==='function'?calcXP():0,atualizado:new Date().toISOString()})
+      body:JSON.stringify({device_key:_alunoKey(),nome,unidade,tarefas:c.done,provas,xp:typeof calcXP==='function'?calcXP():0,progresso:_buildSnapshot(),atualizado:agora})
     });
+    localStorage.setItem('rfLastSync',agora);
   }catch(e){}
 }
 
@@ -1221,6 +1408,11 @@ function _renderLocalRk(cont){
         <option>Tijuca</option>
       </select>
     </div>
+    <div class="mo-field">
+      <label class="mo-lbl" for="inpCodigo">Crie um código pessoal (4 dígitos)</label>
+      <input class="mo-inp" id="inpCodigo" placeholder="Ex: 2026" maxlength="10" inputmode="numeric">
+      <div style="font-size:11px;color:var(--t3);margin-top:5px;line-height:1.5">Use sempre o <b>mesmo nome + unidade + código</b> em qualquer aparelho (celular, computador) para manter seu progresso sincronizado automaticamente.</div>
+    </div>
     <button class="mo-btn" onclick="saveStudent()">Salvar e Continuar</button>
   </div>
 </div>
@@ -1228,19 +1420,33 @@ function _renderLocalRk(cont){
 <!-- ══ MODAL TIMER ══ -->
 <div id="moTimer" class="mo-ov" style="display:none">
   <div class="mo-box">
-    <div class="t-exam" id="tExamTitle">Simulado</div>
-    <div class="t-wrap">
-      <div class="t-num" id="tDisplay">00:00:00</div>
-      <div class="t-lbl" id="tLabel">Tempo disponível</div>
+    <div id="tCore">
+      <div class="t-exam" id="tExamTitle">Simulado</div>
+      <div class="t-wrap">
+        <div class="t-num" id="tDisplay">00:00:00</div>
+        <div class="t-lbl" id="tLabel">Tempo disponível</div>
+      </div>
+      <div class="t-grid">
+        <button class="tbtn-go" id="tBtnGo" onclick="timerToggle()">▶ Iniciar</button>
+        <button class="tbtn-pdf" onclick="timerOpenPDF()">📄 Abrir Prova</button>
+        <button class="tbtn-rst" onclick="timerReset()">↺ Reiniciar</button>
+        <button class="tbtn-ok" onclick="timerDone()">✓ Conclui</button>
+      </div>
+      <div style="text-align:center;margin-top:14px">
+        <button onclick="closeTimer()" style="background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;font-family:inherit">Fechar sem concluir</button>
+      </div>
     </div>
-    <div class="t-grid">
-      <button class="tbtn-go" id="tBtnGo" onclick="timerToggle()">▶ Iniciar</button>
-      <button class="tbtn-pdf" onclick="timerOpenPDF()">📄 Abrir Prova</button>
-      <button class="tbtn-rst" onclick="timerReset()">↺ Reiniciar</button>
-      <button class="tbtn-ok" onclick="timerDone()">✓ Conclui</button>
-    </div>
-    <div style="text-align:center;margin-top:14px">
-      <button onclick="closeTimer()" style="background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;font-family:inherit">Fechar sem concluir</button>
+    <div id="moScoreStep" style="display:none">
+      <div class="t-exam">✓ Prova concluída!</div>
+      <div class="mo-sub" style="text-align:center;margin-top:2px" id="scoreExamName">CPACN</div>
+      <div class="mo-field" style="margin-top:18px">
+        <label class="mo-lbl" for="inpAcertos">Quantas questões você acertou? <span style="color:var(--t3);font-weight:400">(de <span id="scoreTotal">40</span>)</label>
+        <input class="mo-inp" id="inpAcertos" type="number" min="0" placeholder="Ex: 32" style="text-align:center;font-size:22px;font-weight:800">
+      </div>
+      <button class="mo-btn" onclick="saveExamScore()">Salvar resultado</button>
+      <div style="text-align:center;margin-top:12px">
+        <button onclick="skipScore()" style="background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;font-family:inherit">Pular, não quero informar agora</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1523,8 +1729,10 @@ function stSaveConfirm(subj){
   const el=document.getElementById('stTotalHours');if(el)el.textContent=total.toFixed(1)+' h';
   renderPostoCard();
   renderMetas();
+  _markStudyDay();
+  if(typeof renderHome==='function')renderHome();
   showToast(xpGanho>0?'✓ +'+xpGanho+' XP · '+subj:'✓ '+subj+' salvo!');
-  syncRanking();
+  syncTudo();
 }
 
 // ── XP & POSTO ──
@@ -1591,7 +1799,10 @@ function saveCurr(id,pfx,si,total){
   const pct=total?Math.round(done/total*100):0;
   const prog=document.getElementById(pfx+'_prog'+si);if(prog)prog.textContent=done+'/'+total+' · '+pct+'%';
   renderPostoCard();renderRankTable();
+  if(el.checked)_markStudyDay();
+  if(typeof renderHome==='function')renderHome();
   showToast(el.checked?'✓ Tópico dominado! +15 XP':'↩ Tópico desmarcado');
+  syncTudo();
 }
 // ── METAS SEMANAIS ──
 const META_SEMANAL={
@@ -1641,22 +1852,22 @@ const META_SEMANAL={
     '🌐 Inglês: EPCAr 2022 — conectivos, false cognates, vocabulário e 1 redação',
   ]},
   3:{horas:20,foco:[
-    '📐 Matemática: Refazer todas as questões de Mat com erro das semanas anteriores (CN + EPCAr)',
-    '📖 Português: Refazer questões com erro + revisar sintaxe e semântica (CN + EPCAr)',
-    '📜 História e Geografia: Revisão completa da linha do tempo e dos mapas geográficos',
-    '⚡ Física: CN 2020 — revisar hidrostática, estática e 1ª Lei da Termodinâmica',
-    '⚗️ Química: Refazer questões com erro — cinética química e eletroquímica',
-    '🧬 Biologia: Revisar divisão celular, metabolismo energético e classificação dos seres vivos',
-    '🌐 Inglês: CN 2020 + EPCAr 2021 — modal verbs, conditional clauses e 1 redação',
+    '📐 Matemática: CN 2019 + CN 2017 — resolver com cronômetro e catalogar todos os erros',
+    '📖 Português: CN 2019 2º Dia — revisar concordância, termos integrantes e emprego do "que"',
+    '📜 História e Geografia: Revisar toda a linha do tempo (Colônia → Era Vargas) e geografia econômica do Brasil',
+    '⚡ Física: Revisar cinemática, Leis de Newton, calor e refração da luz — tópicos de maior recorrência',
+    '⚗️ Química: Revisar tabela periódica, modelos atômicos e separação de misturas',
+    '🧬 Biologia: Revisar heredogramas, relações ecológicas e membrana plasmática',
+    '✍️ Redação: escrever 1 redação dissertativo-argumentativa cronometrada (50 min)',
   ]},
   2:{horas:20,foco:[
-    '📐 Matemática: Montar ficha completa de fórmulas (folha A4) + resolver EPCAr 2018 e 2019',
+    '📐 Matemática: Refazer todas as questões erradas das 9 provas anteriores (2017–2025)',
     '📖 Português: Revisão final — concordância, regência, crase e interpretação de texto',
-    '📜 História e Geografia: Revisão final da linha do tempo e dos dados geoeconômicos',
-    '⚡ Física: EPCAr 2019 e 2020 — revisar tópicos com maior índice de erro',
-    '⚗️ Química: Revisão final — tabela periódica, reações e funções inorgânicas',
+    '📜 História e Geografia: Revisão final da linha do tempo e dos dados socioeconômicos',
+    '⚡ Física: Revisão final — cinemática, Leis de Newton, termodinâmica e óptica',
+    '⚗️ Química: Revisão final — tabela periódica, ligações químicas e funções inorgânicas',
     '🧬 Biologia: Revisão final — genética, ecologia e fisiologia humana',
-    '🌐 Inglês: EPCAr 2018 — revisar tempos verbais e escrever redação final',
+    '✍️ Redação: escrever a redação final e comparar a evolução com a da semana anterior',
   ]},
   1:{horas:5,foco:[
     '📐 Matemática: Revisão leve da ficha de fórmulas (máx. 20 min — nada novo!)',
@@ -1665,7 +1876,7 @@ const META_SEMANAL={
     '⚡ Física: Reler fórmulas principais na ficha (máx. 10 min)',
     '⚗️ Química: Reler reações e funções inorgânicas principais (máx. 10 min)',
     '🧬 Biologia: Reler resumo de genética e fisiologia (máx. 10 min)',
-    '🌐 Inglês: Confirmar local, horário e documentos · Dormir no mínimo 8h!',
+    '⚓ Confirmar local, horário e documentos da prova CN (edital Marinha) · Dormir no mínimo 8h!',
   ]},
 };
 
@@ -1687,7 +1898,7 @@ function renderMetas(){
   }).join('');
   const el=document.getElementById('metasContainer');if(!el)return;
   el.innerHTML='<div class="ind-grid" style="margin-bottom:16px">'
-    +'<div class="ind-item"><div class="ind-num">'+meta.horas+'h</div><div class="ind-lbl">Meta desta semana</div><div class="ind-sub">Semana '+semAtual+' de 8</div></div>'
+    +'<div class="ind-item"><div class="ind-num">'+meta.horas+'h</div><div class="ind-lbl">Meta desta semana</div><div class="ind-sub">Semana '+semAtual+'</div></div>'
     +'<div class="ind-item"><div class="ind-num">'+totalHoras.toFixed(1)+'h</div><div class="ind-lbl">Total estudado</div><div class="ind-sub">acumulado</div><div class="ind-prog"><div class="ind-prog-fill" style="width:'+pctH+'%"></div></div></div>'
     +'<div class="ind-item"><div class="ind-num">'+c.done+'/'+c.total+'</div><div class="ind-lbl">Tarefas feitas</div><div class="ind-sub">'+pctT+'% do plano</div><div class="ind-prog"><div class="ind-prog-fill" style="width:'+pctT+'%"></div></div></div>'
     +'</div>'
@@ -1701,8 +1912,10 @@ function saveMeta(id){
   renderMetas();
   renderPostoCard();
   renderRankTable();
+  if(el.checked)_markStudyDay();
+  if(typeof renderHome==='function')renderHome();
   showToast(el.checked?'✓ Meta concluída! +20 XP':'↩ Meta desmarcada');
-  syncRanking();
+  syncTudo();
 }
 
 // ── RANKING TAB: LEADERBOARD ──
@@ -1725,8 +1938,169 @@ async function initRankingTab(){
   loadRankingTab();
 }
 
+// ── CONQUISTAS (achievements) ──
+const ACHIEVEMENTS=[
+  {id:'primeira_prova',ico:'🏅',nome:'Primeira Prova',secret:false,check:function(ctx){return ctx.provas>=1;}},
+  {id:'streak7',ico:'🔥',nome:'7 dias seguidos',secret:false,check:function(ctx){return ctx.streak>=7;}},
+  {id:'topicos100',ico:'📚',nome:'100 tópicos',secret:false,check:function(ctx){return ctx.topicosDone>=100;}},
+  {id:'mat_expert',ico:'⚓',nome:'Especialista em Matemática',secret:false,check:function(ctx){return ctx.matPct>=100;}},
+  {id:'redacao_master',ico:'✍️',nome:'Mestre da Redação',secret:false,check:function(ctx){return ctx.redacoes>=5;}},
+  {id:'ninja',ico:'🥷',nome:'Ninja — gabarito perfeito',secret:true,check:function(ctx){return ctx.notaPerfeita;}},
+  {id:'capitao',ico:'⚓',nome:'Capitão — 30 dias estudando',secret:true,check:function(ctx){return ctx.diasEstudados>=30;}},
+  {id:'invencivel',ico:'💪',nome:'Invencível — 5 simulados',secret:true,check:function(ctx){return ctx.provas>=5;}},
+];
+function _achContext(){
+  const c=countTasks();
+  let topicosDone=0;
+  CN_CURR.forEach(function(s,si){s.items.forEach(function(_,ii){if(localStorage.getItem('cn_'+si+'_'+ii)==='1')topicosDone++;});});
+  EP_CURR.forEach(function(s,si){s.items.forEach(function(_,ii){if(localStorage.getItem('ep_'+si+'_'+ii)==='1')topicosDone++;});});
+  const matSubj=CN_CURR[0];let matDone=0;
+  if(matSubj)matSubj.items.forEach(function(_,ii){if(localStorage.getItem('cn_0_'+ii)==='1')matDone++;});
+  const matPct=matSubj&&matSubj.items.length?Math.round(matDone/matSubj.items.length*100):0;
+  const notas=JSON.parse(localStorage.getItem('rfNotas')||'[]');
+  return{
+    provas:parseInt(localStorage.getItem('rfProvas')||0),
+    streak:calcStreak(),
+    topicosDone:topicosDone,
+    matPct:matPct,
+    redacoes:c.red,
+    notaPerfeita:notas.some(function(n){return n.total&&n.acertos===n.total;}),
+    diasEstudados:JSON.parse(localStorage.getItem('rfStreakDays')||'[]').length
+  };
+}
+
+// ── PRÓXIMO OBJETIVO / MISSÃO DA SEMANA ──
+function _missaoAtual(){
+  const semAtual=Math.min(8,Math.max(1,semanasRest()));
+  const sem=SEMANAS.find(function(s){return s.n===semAtual;});
+  if(!sem)return null;
+  let idx=sem.tasks.findIndex(function(t){return t.p==='a'&&localStorage.getItem(taskId(sem.n,sem.tasks.indexOf(t)))!=='1';});
+  if(idx===-1)idx=sem.tasks.findIndex(function(t){return localStorage.getItem(taskId(sem.n,sem.tasks.indexOf(t)))!=='1';});
+  const done=idx===-1;
+  if(idx===-1)idx=0;
+  return{sem:sem,idx:idx,task:sem.tasks[idx],done:done};
+}
+
+// ── RESUMO DO DIA (replay noturno) ──
+function _ensureDailyBaseline(){
+  const today=new Date().toISOString().slice(0,10);
+  let base=null;
+  try{base=JSON.parse(localStorage.getItem('rfDailyBase')||'null');}catch(e){}
+  if(!base||base.date!==today){
+    const c=countTasks();
+    base={date:today,horas:parseFloat(localStorage.getItem('rfStudyHours')||0),tarefas:c.done,redacoes:c.red,xp:calcXP()};
+    localStorage.setItem('rfDailyBase',JSON.stringify(base));
+  }
+  return base;
+}
+function _todayStats(){
+  const base=_ensureDailyBaseline();
+  const c=countTasks();
+  const notas=JSON.parse(localStorage.getItem('rfNotas')||'[]');
+  const today=new Date().toISOString().slice(0,10);
+  const questoes=notas.filter(function(n){return n.data&&n.data.slice(0,10)===today;}).reduce(function(s,n){return s+(n.total||0);},0);
+  return{
+    horas:Math.max(0,parseFloat(localStorage.getItem('rfStudyHours')||0)-base.horas),
+    tarefas:Math.max(0,c.done-base.tarefas),
+    redacoes:Math.max(0,c.red-base.redacoes),
+    xp:Math.max(0,calcXP()-base.xp),
+    questoes:questoes
+  };
+}
+
+function _saudacao(){
+  const h=new Date().getHours();
+  if(h<12)return'Bom dia';
+  if(h<18)return'Boa tarde';
+  return'Boa noite';
+}
+
+async function _minhaPosicaoRanking(){
+  if(!SB_URL||!SB_KEY)return null;
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=device_key,xp&order=xp.desc&limit=500',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    const rows=await r.json();
+    const key=_alunoKey();
+    const idx=rows.findIndex(function(row){return row.device_key===key;});
+    return idx===-1?null:idx+1;
+  }catch(e){return null;}
+}
+
+function renderHome(){
+  const el=document.getElementById('homeHero');if(!el)return;
+  const{nome}=_getStu();
+  if(!nome){el.innerHTML='';return;}
+  _ensureDailyBaseline();
+  const cn=diasRest(D_CN);
+  const xp=calcXP(),c=countTasks(),pct=c.total?Math.round(c.done/c.total*100):0;
+  const streak=calcStreak();
+  const ctx=_achContext();
+  const missao=_missaoAtual();
+  const meta=META_SEMANAL[Math.min(8,Math.max(1,semanasRest()))]||{foco:[]};
+  const metaDone=meta.foco.filter(function(f,ii){return localStorage.getItem('meta_s'+Math.min(8,Math.max(1,semanasRest()))+'_'+ii)==='1';}).length;
+  const metaPct=meta.foco.length?Math.round(metaDone/meta.foco.length*100):0;
+
+  // anel de progresso (conic-gradient)
+  const ringDeg=Math.round(pct*3.6);
+  const ringStyle='background:conic-gradient(var(--teal) '+ringDeg+'deg, rgba(255,255,255,.12) '+ringDeg+'deg)';
+
+  const achHtml=ACHIEVEMENTS.map(function(a){
+    const unlocked=a.check(ctx);
+    if(a.secret&&!unlocked){
+      return '<div class="ach-item locked"><div class="ach-ico">🔒</div><div class="ach-nome">Conquista secreta</div></div>';
+    }
+    return '<div class="ach-item'+(unlocked?' unlocked':' locked')+'"><div class="ach-ico">'+a.ico+'</div><div class="ach-nome">'+a.nome+'</div></div>';
+  }).join('');
+
+  const missaoHtml=missao?(
+    '<div class="mission-card">'
+    +'<div><div class="mission-tag">🎯 Missão da semana</div><div class="mission-txt">'+(missao.done?'Você concluiu a missão desta semana! 🎉':missao.task.t)+'</div></div>'
+    +'<div class="mission-reward'+(missao.done?' mission-done':'')+'">'+(missao.done?'✓ Concluída':'+50 XP')+'</div>'
+    +'</div>'
+  ):'';
+
+  const hora=new Date().getHours();
+  let replayHtml='';
+  if(hora>=18){
+    const t=_todayStats();
+    replayHtml='<div class="replay-card" style="margin-top:14px">'
+      +'<div style="font-weight:800;font-size:13px;flex-basis:100%">🌙 Replay do dia</div>'
+      +'<div class="replay-stat"><div class="replay-num">'+t.horas.toFixed(1)+'h</div><div class="replay-lbl">Estudadas</div></div>'
+      +'<div class="replay-stat"><div class="replay-num">'+t.tarefas+'</div><div class="replay-lbl">Tarefas</div></div>'
+      +'<div class="replay-stat"><div class="replay-num">'+t.redacoes+'</div><div class="replay-lbl">Redações</div></div>'
+      +(t.questoes?'<div class="replay-stat"><div class="replay-num">'+t.questoes+'</div><div class="replay-lbl">Questões</div></div>':'')
+      +'<div class="replay-stat"><div class="replay-num">+'+t.xp+'</div><div class="replay-lbl">XP hoje</div></div>'
+      +'</div>';
+  }
+
+  el.innerHTML=
+    '<div class="home-card"><div class="home-inner">'
+    +'<div class="home-greet">'+_saudacao()+', '+nome.split(' ')[0]+' 👋</div>'
+    +'<div class="home-sub">Faltam <b>'+cn+' dias</b> para o Colégio Naval</div>'
+    +'<div class="home-stats">'
+    +'<div class="home-stat"><div class="home-stat-ico">🔥</div><div class="home-stat-num">'+streak+'</div><div class="home-stat-lbl">dias seguidos</div></div>'
+    +'<div class="home-stat"><div class="home-stat-ico">⭐</div><div class="home-stat-num">'+xp+'</div><div class="home-stat-lbl">XP total</div></div>'
+    +'<div class="home-stat"><div class="home-stat-ico">🏆</div><div class="home-stat-num" id="homeRankPos">—</div><div class="home-stat-lbl">no ranking</div></div>'
+    +'<div class="home-stat"><div class="home-stat-ico">🎯</div><div class="home-stat-num">'+metaPct+'%</div><div class="home-stat-lbl">meta da semana</div></div>'
+    +'</div>'
+    +'<div class="home-prog-row">'
+    +'<div class="home-ring" style="'+ringStyle+'"><div class="home-ring-inner"><div class="home-ring-pct">'+pct+'%</div><div class="home-ring-lbl">concluído</div></div></div>'
+    +'<div style="flex:1;min-width:160px"><div class="home-obj-lbl">Próximo objetivo</div><div class="home-obj-txt">'+(missao&&!missao.done?missao.task.t:'Tudo em dia por aqui! 🎉')+'</div></div>'
+    +'</div>'
+    +'<div style="margin-top:16px">'+missaoHtml+'</div>'
+    +'<div style="margin-top:16px"><div class="home-obj-lbl" style="margin-bottom:8px">🏅 Conquistas</div><div class="ach-grid">'+achHtml+'</div></div>'
+    +replayHtml
+    +'</div></div>';
+
+  _minhaPosicaoRanking().then(function(pos){
+    const rp=document.getElementById('homeRankPos');
+    if(rp)rp.textContent=pos?(pos+'º'):'—';
+  });
+}
+
 document.addEventListener('DOMContentLoaded',function(){
   renderMetas();
+  renderHome();
   // ── Cores por matéria nos topic cards ──
   const cores={
     'Matemática':'#16a34a','Português':'#2563eb','História':'#d97706',
