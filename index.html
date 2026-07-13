@@ -294,6 +294,26 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
 .replay-stat{text-align:center}
 .replay-num{font-size:20px;font-weight:900;color:var(--teal)}
 .replay-lbl{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase}
+
+/* ── META DIÁRIA ── */
+.daily-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.daily-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.daily-title{font-size:12.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+.daily-pct{font-size:21px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.daily-list{display:flex;flex-direction:column;gap:8px}
+.daily-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--t2);font-weight:500}
+.daily-item.done{color:var(--t3);text-decoration:line-through}
+.daily-check{font-size:16px;flex-shrink:0}
+
+/* ── BARRA DE PREPARAÇÃO (estilo jogo) ── */
+.prep-wrap{margin:16px 0}
+.prep-lbl-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.prep-lbl{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.prep-pct{font-size:16px;font-weight:900;color:#fff}
+.prep-track{height:22px;background:rgba(255,255,255,.12);border-radius:12px;overflow:hidden;position:relative;box-shadow:inset 0 2px 5px rgba(0,0,0,.3)}
+.prep-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--lime));border-radius:12px;position:relative;overflow:hidden;transition:width .9s cubic-bezier(.22,1,.36,1);min-width:22px}
+.prep-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);animation:prepShine 2.6s ease-in-out infinite}
+@keyframes prepShine{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 .curr-subj-body{display:none;padding:12px 16px}
 .curr-subj.open .curr-subj-body{display:block}
 .curr-items{list-style:none;display:flex;flex-direction:column;gap:5px}
@@ -597,9 +617,9 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:var(--bg);co
         <div class="prova-card"><div class="prova-year">2024</div><div class="prova-btns">
           <button class="prova-btn btn-un" onclick="pdf('CPCAR2024_versao_A (1).pdf','epcar')">📄 Prova — Versão A</button></div></div>
         <div class="prova-card"><div class="prova-year">2023</div><div class="prova-btns">
-          <button class="prova-btn btn-un" onclick="pdf('CPCAR_2023_versão_A.pdf','epcar')">📄 Prova — Versão A</button></div></div>
+          <button class="prova-btn btn-un" onclick="pdf('CPCAR_2023_versao_A.pdf','epcar')">📄 Prova — Versão A</button></div></div>
         <div class="prova-card"><div class="prova-year">2022</div><div class="prova-btns">
-          <button class="prova-btn btn-un" onclick="pdf('cpcar2022_versão_A.pdf','epcar')">📄 Prova — Versão A</button></div></div>
+          <button class="prova-btn btn-un" onclick="pdf('cpcar2022_versao_A.pdf','epcar')">📄 Prova — Versão A</button></div></div>
         <div class="prova-card"><div class="prova-year">2021</div><div class="prova-btns">
           <button class="prova-btn btn-un" onclick="pdf('cpcar2021_prova_a.pdf','epcar')">📄 Prova — Versão A</button></div></div>
         <div class="prova-card"><div class="prova-year">2020</div><div class="prova-btns">
@@ -1329,14 +1349,39 @@ async function _syncNow(){
   const c=countTasks();
   const provas=parseInt(localStorage.getItem('rfProvas'))||0;
   const agora=new Date().toISOString();
+  const base={device_key:_alunoKey(),nome,unidade,tarefas:c.done,provas,xp:typeof calcXP==='function'?calcXP():0,atualizado:agora};
   try{
-    await fetch(SB_URL+'/rest/v1/ranking',{
+    const r=await fetch(SB_URL+'/rest/v1/ranking',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify({device_key:_alunoKey(),nome,unidade,tarefas:c.done,provas,xp:typeof calcXP==='function'?calcXP():0,progresso:_buildSnapshot(),atualizado:agora})
+      body:JSON.stringify(Object.assign({},base,{progresso:_buildSnapshot()}))
     });
+    if(!r.ok)throw new Error('sem coluna progresso?');
     localStorage.setItem('rfLastSync',agora);
-  }catch(e){}
+  }catch(e){
+    // Se a coluna "progresso" ainda não existir no Supabase, tenta sem ela
+    // (mantém ao menos o ranking/XP funcionando enquanto a coluna não é criada).
+    try{
+      await fetch(SB_URL+'/rest/v1/ranking',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'resolution=merge-duplicates'},
+        body:JSON.stringify(base)
+      });
+      localStorage.setItem('rfLastSync',agora);
+    }catch(e2){}
+  }
+}
+
+// Um mesmo aluno pode ter ficado com mais de um registro (ex: usou o site em
+// aparelhos diferentes antes de configurar nome+unidade+código). Isso agrupa
+// por aluno e mantém só o registro com mais XP de cada um.
+function _dedupRanking(rows){
+  const seen={};
+  (rows||[]).forEach(function(r){
+    const k=_slug(r.nome)+'_'+_slug(r.unidade);
+    if(!seen[k]||(r.xp||0)>(seen[k].xp||0))seen[k]=r;
+  });
+  return Object.values(seen).sort(function(a,b){return(b.xp||0)-(a.xp||0);});
 }
 
 async function loadRanking(){
@@ -1344,21 +1389,21 @@ async function loadRanking(){
   if(!SB_URL||!SB_KEY){_renderLocalRk(cont);return;}
   cont.innerHTML='<div class="rk-empty">Carregando...</div>';
   try{
-    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=50',{
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=300',{
       headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
     });
-    _renderRk(await r.json(),cont);
+    _renderRk(_dedupRanking(await r.json()).slice(0,50),cont);
   }catch(e){_renderLocalRk(cont);}
 }
 
 function _renderRk(data,cont){
   if(!data||!data.length){cont.innerHTML='<div class="rk-empty">Nenhum participante ainda.<br>Complete tarefas e provas para aparecer aqui!</div>';return;}
-  const myKey=_devKey();
+  const meKey=_slug(localStorage.getItem('rfNome'))+'_'+_slug(localStorage.getItem('rfUnidade'));
   const medals=['🥇','🥈','🥉'];
   const maxXP=Math.max(1,data[0]?.xp||1);
-  let html='<div style="overflow-x:auto"><table class="rk-table"><thead><tr><th>#</th><th>Nome</th><th>Posto</th><th>Unidade</th><th>XP</th></tr></thead><tbody>';
+  let html='<div style="font-size:11px;color:var(--t3);margin-bottom:8px">🏆 Top 50 alunos</div><div style="overflow-x:auto"><table class="rk-table"><thead><tr><th>#</th><th>Nome</th><th>Posto</th><th>Unidade</th><th>XP</th></tr></thead><tbody>';
   data.forEach(function(r,i){
-    const isMe=r.device_key===myKey;
+    const isMe=(_slug(r.nome)+'_'+_slug(r.unidade))===meKey;
     const xp=r.xp||0;
     const pct=Math.round((xp/maxXP)*100);
     let posto='—';
@@ -1924,8 +1969,8 @@ async function loadRankingTab(){
   if(!SB_URL||!SB_KEY){cont.innerHTML='<div class="rk-empty">Conecte o Supabase para ver o ranking de todos os alunos.</div>';return;}
   cont.innerHTML='<div class="rk-empty">Carregando...</div>';
   try{
-    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=50',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
-    _renderRk(await r.json(),cont);
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=*&order=xp.desc&limit=300',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    _renderRk(_dedupRanking(await r.json()).slice(0,50),cont);
   }catch(e){cont.innerHTML='<div class="rk-empty">Erro ao carregar. Verifique a conexão.</div>';}
 }
 
@@ -2018,12 +2063,48 @@ function _saudacao(){
 async function _minhaPosicaoRanking(){
   if(!SB_URL||!SB_KEY)return null;
   try{
-    const r=await fetch(SB_URL+'/rest/v1/ranking?select=device_key,xp&order=xp.desc&limit=500',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    await _syncNow(); // garante que meu registro está atualizado antes de calcular a posição
+    const r=await fetch(SB_URL+'/rest/v1/ranking?select=nome,unidade,xp&order=xp.desc&limit=500',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
     const rows=await r.json();
-    const key=_alunoKey();
-    const idx=rows.findIndex(function(row){return row.device_key===key;});
+    const list=_dedupRanking(rows);
+    const meKey=_slug(localStorage.getItem('rfNome'))+'_'+_slug(localStorage.getItem('rfUnidade'));
+    const idx=list.findIndex(function(row){return(_slug(row.nome)+'_'+_slug(row.unidade))===meKey;});
     return idx===-1?null:idx+1;
   }catch(e){return null;}
+}
+
+// ── META DIÁRIA ──
+const DAILY_GOALS={horas:2,questoes:20};
+function _metaDiaria(){
+  const t=_todayStats();
+  const horasPct=Math.min(100,Math.round((t.horas/DAILY_GOALS.horas)*100));
+  const questoesPct=Math.min(100,Math.round((t.questoes/DAILY_GOALS.questoes)*100));
+  const redacaoOk=t.redacoes>=1;
+  const overall=Math.round((horasPct+questoesPct+(redacaoOk?100:0))/3);
+  return{horas:t.horas,horasPct:horasPct,horasOk:t.horas>=DAILY_GOALS.horas,
+    questoes:t.questoes,questoesPct:questoesPct,questoesOk:t.questoes>=DAILY_GOALS.questoes,
+    redacaoOk:redacaoOk,overall:overall};
+}
+
+// ── BARRA DE PREPARAÇÃO (score geral, estilo jogo) ──
+function _curriculumPct(){
+  let total=0,done=0;
+  CN_CURR.forEach(function(s,si){total+=s.items.length;s.items.forEach(function(_,ii){if(localStorage.getItem('cn_'+si+'_'+ii)==='1')done++;});});
+  EP_CURR.forEach(function(s,si){total+=s.items.length;s.items.forEach(function(_,ii){if(localStorage.getItem('ep_'+si+'_'+ii)==='1')done++;});});
+  return total?Math.round(done/total*100):0;
+}
+function _notasAvgPct(){
+  const notas=JSON.parse(localStorage.getItem('rfNotas')||'[]');
+  if(!notas.length)return null;
+  return Math.round(notas.reduce(function(s,n){return s+(n.pct||0);},0)/notas.length);
+}
+function _prepScore(){
+  const c=countTasks();
+  const taskPct=c.total?Math.round(c.done/c.total*100):0;
+  const curPct=_curriculumPct();
+  const notaPct=_notasAvgPct();
+  if(notaPct===null)return Math.round(taskPct*0.5+curPct*0.5);
+  return Math.round(taskPct*0.35+curPct*0.35+notaPct*0.3);
 }
 
 function renderHome(){
@@ -2043,6 +2124,23 @@ function renderHome(){
   // anel de progresso (conic-gradient)
   const ringDeg=Math.round(pct*3.6);
   const ringStyle='background:conic-gradient(var(--teal) '+ringDeg+'deg, rgba(255,255,255,.12) '+ringDeg+'deg)';
+
+  // meta diária (topo)
+  const md=_metaDiaria();
+  const dailyHtml='<div class="daily-card">'
+    +'<div class="daily-hdr"><span class="daily-title">🎯 Meta de hoje</span><span class="daily-pct">'+md.overall+'%</span></div>'
+    +'<div class="daily-list">'
+    +'<div class="daily-item'+(md.horasOk?' done':'')+'"><span class="daily-check">'+(md.horasOk?'☑':'☐')+'</span>'+md.horas.toFixed(1)+'h / '+DAILY_GOALS.horas+'h de estudo</div>'
+    +'<div class="daily-item'+(md.questoesOk?' done':'')+'"><span class="daily-check">'+(md.questoesOk?'☑':'☐')+'</span>'+md.questoes+' / '+DAILY_GOALS.questoes+' questões resolvidas</div>'
+    +'<div class="daily-item'+(md.redacaoOk?' done':'')+'"><span class="daily-check">'+(md.redacaoOk?'☑':'☐')+'</span>Redação do dia</div>'
+    +'</div></div>';
+
+  // barra de preparação (estilo jogo)
+  const prep=_prepScore();
+  const prepHtml='<div class="prep-wrap">'
+    +'<div class="prep-lbl-row"><span class="prep-lbl">🎮 Preparação para o CN</span><span class="prep-pct">'+prep+'%</span></div>'
+    +'<div class="prep-track"><div class="prep-fill" style="width:'+prep+'%"></div></div>'
+    +'</div>';
 
   const achHtml=ACHIEVEMENTS.map(function(a){
     const unlocked=a.check(ctx);
@@ -2074,7 +2172,8 @@ function renderHome(){
   }
 
   el.innerHTML=
-    '<div class="home-card"><div class="home-inner">'
+    dailyHtml
+    +'<div class="home-card"><div class="home-inner">'
     +'<div class="home-greet">'+_saudacao()+', '+nome.split(' ')[0]+' 👋</div>'
     +'<div class="home-sub">Faltam <b>'+cn+' dias</b> para o Colégio Naval</div>'
     +'<div class="home-stats">'
@@ -2083,6 +2182,7 @@ function renderHome(){
     +'<div class="home-stat"><div class="home-stat-ico">🏆</div><div class="home-stat-num" id="homeRankPos">—</div><div class="home-stat-lbl">no ranking</div></div>'
     +'<div class="home-stat"><div class="home-stat-ico">🎯</div><div class="home-stat-num">'+metaPct+'%</div><div class="home-stat-lbl">meta da semana</div></div>'
     +'</div>'
+    +prepHtml
     +'<div class="home-prog-row">'
     +'<div class="home-ring" style="'+ringStyle+'"><div class="home-ring-inner"><div class="home-ring-pct">'+pct+'%</div><div class="home-ring-lbl">concluído</div></div></div>'
     +'<div style="flex:1;min-width:160px"><div class="home-obj-lbl">Próximo objetivo</div><div class="home-obj-txt">'+(missao&&!missao.done?missao.task.t:'Tudo em dia por aqui! 🎉')+'</div></div>'
